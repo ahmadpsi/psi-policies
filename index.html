@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow">
+<title>PSI Policy Permissions</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: app shell — sticky top bar with view tabs, then one working view at a time; policy detail opens as a side sheet */
+:root{
+  --bg:#f4f6f8; --surface:#ffffff; --sunk:#eef1f4; --fg:#16212c; --muted:#5b6876; --line:#dde3e9;
+  --accent:#0e6b72; --accent-ink:#ffffff; --accent-soft:#e1f1f2;
+  --ok:#1f7a45; --ok-soft:#e3f4ea; --warn:#9a5b00; --warn-soft:#fdf0d8; --bad:#b42318; --bad-soft:#fde5e3;
+  --s0:#eef3fb; --s0t:#1d3a66; --s1:#d6e3f6; --s1t:#1d3a66; --s2:#b3cbee; --s2t:#16325a; --s3:#7fa5dd; --s3t:#0d2240; --s4:#3f74c4; --s4t:#ffffff; --s5:#173f7e; --s5t:#ffffff; --nil:#f1ece4; --nilt:#7a5a2a;
+  --sans:"IBM Plex Sans","IBM Plex Sans Arabic",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --ar:"IBM Plex Sans Arabic","IBM Plex Sans",system-ui,Tahoma,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --shadow:0 10px 30px rgba(16,33,44,.14);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e141a; --surface:#151d25; --sunk:#111820; --fg:#e4eaf0; --muted:#97a4b2; --line:#26313c;
+  --accent:#4fb8bf; --accent-ink:#06191b; --accent-soft:#163236;
+  --ok:#5fcf8c; --ok-soft:#14301f; --warn:#f0b65a; --warn-soft:#352711; --bad:#ff8a80; --bad-soft:#3a1715;
+  --s0:#1b2635; --s0t:#bcd0ee; --s1:#20324c; --s1t:#cfe0fa; --s2:#2a4670; --s2t:#e2ecfb; --s3:#355f9c; --s3t:#ffffff; --s4:#4a7fd0; --s4t:#ffffff; --s5:#8fb6f0; --s5t:#0b1a30; --nil:#2e2719; --nilt:#e3c48f;
+  --shadow:0 10px 30px rgba(0,0,0,.45); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e141a; --surface:#151d25; --sunk:#111820; --fg:#e4eaf0; --muted:#97a4b2; --line:#26313c;
+  --accent:#4fb8bf; --accent-ink:#06191b; --accent-soft:#163236;
+  --ok:#5fcf8c; --ok-soft:#14301f; --warn:#f0b65a; --warn-soft:#352711; --bad:#ff8a80; --bad-soft:#3a1715;
+  --s0:#1b2635; --s0t:#bcd0ee; --s1:#20324c; --s1t:#cfe0fa; --s2:#2a4670; --s2t:#e2ecfb; --s3:#355f9c; --s3t:#ffffff; --s4:#4a7fd0; --s4t:#ffffff; --s5:#8fb6f0; --s5t:#0b1a30; --nil:#2e2719; --nilt:#e3c48f;
+  --shadow:0 10px 30px rgba(0,0,0,.45); color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:14px;line-height:1.5;margin:0}
+html[lang="ar"] body{font-family:var(--ar)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.pad{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1280px;margin:0 auto}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.topin{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding-block:10px}
+.brand{display:flex;flex-direction:column;line-height:1.2;margin-inline-end:auto}
+.brand b{font-size:16px;font-weight:700;letter-spacing:-.01em}
+.brand span{font-size:12px;color:var(--muted)}
+nav.tabs{display:flex;gap:2px;background:var(--sunk);padding:3px;border-radius:9px;overflow-x:auto;max-width:100%}
+nav.tabs a{padding:6px 12px;border-radius:7px;text-decoration:none;color:var(--muted);font-weight:500;white-space:nowrap;font-size:13.5px}
+nav.tabs a[aria-current="page"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.tools{display:flex;gap:8px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:13px;font-weight:500}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.btn.bad{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn.sm{padding:3px 8px;font-size:12px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+main{padding-block:22px 64px}
+h1{font-size:24px;margin:0 0 4px;letter-spacing:-.01em;text-wrap:balance}
+h2{font-size:17px;margin:0 0 10px;text-wrap:balance}
+.lead{color:var(--muted);margin:0 0 18px;max-width:72ch}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:22px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi b{display:block;font-family:var(--mono);font-size:24px;font-weight:500;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.kpi.alert{border-color:color-mix(in srgb,var(--bad) 45%,var(--line))}
+.kpi.alert b{color:var(--bad)}
+.bar{height:6px;background:var(--sunk);border-radius:4px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:var(--accent)}
+.chip{display:inline-flex;align-items:center;gap:4px;border-radius:5px;padding:2px 7px;font-size:12px;font-weight:500;white-space:nowrap}
+.l0{background:var(--s0);color:var(--s0t)}.l1{background:var(--s1);color:var(--s1t)}.l2{background:var(--s2);color:var(--s2t)}.l3{background:var(--s3);color:var(--s3t)}.l4{background:var(--s4);color:var(--s4t)}.l5{background:var(--s5);color:var(--s5t)}.ln{background:var(--nil);color:var(--nilt);outline:1px dashed var(--nilt);outline-offset:-1px}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.p-ok{background:var(--ok-soft);color:var(--ok)}.p-warn{background:var(--warn-soft);color:var(--warn)}.p-bad{background:var(--bad-soft);color:var(--bad)}.p-none{background:var(--sunk);color:var(--muted)}.p-acc{background:var(--accent-soft);color:var(--accent)}
+.sev{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:4px}
+.sev.High{background:var(--bad-soft);color:var(--bad)}.sev.Medium{background:var(--warn-soft);color:var(--warn)}.sev.Low{background:var(--s0);color:var(--s0t)}
+.findings{display:grid;gap:10px}
+.fcard{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:16px}
+.fcard h3{margin:4px 0 4px;font-size:15px}
+.fcard p{margin:0 0 6px;color:var(--muted);font-size:13px}
+.fcard .rec{color:var(--fg);font-size:13px}
+.fside{display:flex;flex-direction:column;gap:6px}
+.fside label{font-size:11.5px;color:var(--muted)}
+.fside select,.fside input,.fside textarea,.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:7px;padding:6px 8px;font-size:13px}
+.meta{font-size:11.5px;color:var(--muted)}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.toolbar input[type=search]{flex:1 1 240px;min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 12px}
+.toolbar select{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:7px 8px;font-size:13px}
+.toolbar label{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
+.tablewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table.list{border-collapse:collapse;width:100%;min-width:1000px}
+.list th{font-size:12px;color:var(--muted);font-weight:600;text-align:start;padding:10px;border-bottom:1px solid var(--line);white-space:nowrap}
+.list td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+.list tbody tr{cursor:pointer}
+.list tbody tr:hover td{background:var(--sunk)}
+.list tr:last-child td{border-bottom:0}
+.pname{font-weight:600}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.counts{display:flex;gap:8px;font-size:12px;color:var(--muted)}
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(10,18,26,.35);z-index:40}
+.sheet{position:fixed;top:0;bottom:0;inset-inline-end:0;width:min(980px,100%);background:var(--bg);z-index:41;box-shadow:var(--shadow);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.sheethead{background:var(--surface);border-bottom:1px solid var(--line);padding-block:14px;display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.sheethead h2{margin:0;font-size:19px}
+.sheetbody{overflow-y:auto;padding-block:16px 40px;flex:1}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px}
+.panel h3{margin:0 0 10px;font-size:14px}
+.modtabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px}
+.modtabs button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 10px;font-size:12.5px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.modtabs button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.seg{display:inline-flex;background:var(--sunk);border-radius:7px;padding:2px;margin-bottom:10px}
+.seg button{border:0;background:transparent;padding:4px 12px;border-radius:5px;cursor:pointer;font-size:12.5px}
+.seg button[aria-pressed="true"]{background:var(--surface);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.grid{overflow-x:auto;direction:ltr}
+table.tick{border-collapse:collapse;font-size:12px;width:100%}
+.tick th{font-weight:500;color:var(--muted);padding:4px 4px;text-align:center;font-size:11px;line-height:1.2;vertical-align:bottom}
+.tick th.rn,.tick td.rn{text-align:left;white-space:nowrap;padding-right:10px}
+.tick td{padding:4px;text-align:center;border-top:1px solid var(--line)}
+.tick tr.sec td{text-align:left;color:var(--muted);font-size:11px;background:var(--sunk)}
+.y{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:4px;background:var(--ok-soft);color:var(--ok);font-weight:700;font-size:12px}
+.n{display:inline-block;width:14px;height:14px;border-radius:3px;border:1.5px solid var(--line)}
+.na{color:var(--muted)}
+.tick td.v{font-family:var(--mono);font-size:11px;color:var(--fg)}
+.opts{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:4px}
+.opts li{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:6px 8px;border:1px solid var(--line);border-radius:7px;font-size:13px}
+.opts li .lbl{min-width:0;direction:ltr;text-align:start}
+.prop-btn{opacity:.55}
+.prop-btn:hover{opacity:1}
+.thread{display:grid;gap:8px}
+.msg{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--bg)}
+.msg .who{font-size:12px;font-weight:600}
+.msg .txt{font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}
+.field{display:grid;gap:4px;margin-bottom:8px}
+.field label{font-size:12px;color:var(--muted)}
+.empty{color:var(--muted);font-size:13px;padding:10px 0}
+.prop{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:12px 14px;display:grid;gap:6px}
+.prop .chg{font-family:var(--mono);font-size:12.5px;direction:ltr;text-align:start;overflow-wrap:anywhere}
+.prop .chg s{color:var(--bad)}
+.prop .chg b{color:var(--ok)}
+.props{display:grid;gap:10px}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.cmp select{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px}
+.dtable{border-collapse:collapse;width:100%;font-size:12.5px;direction:ltr}
+.dtable th,.dtable td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left}
+.dtable th{color:var(--muted);font-weight:600;font-size:12px}
+.dtable td.st{white-space:nowrap}
+.e{color:var(--ok);font-weight:600}.d{color:var(--muted)}
+.toast{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));inset-inline-start:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:8px 14px;border-radius:8px;font-size:13px;z-index:60}
+html[dir="rtl"] .toast{transform:translateX(50%)}
+.banner{background:var(--warn-soft);color:var(--warn);border-radius:8px;padding:8px 12px;font-size:13px;margin-bottom:14px}
+.legend{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;margin-bottom:12px}
+@media (max-width:820px){.fcard{grid-template-columns:1fr}.cols{grid-template-columns:1fr}.cmp{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<style>[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style></head>
+<body>
+<header class="top pad"><div class="wrap topin">
+  <div class="brand"><b data-t="title"></b><span data-t="subtitle"></span></div>
+  <nav class="tabs" id="tabs" hidden>
+    <a href="#overview" data-v="overview" data-t="tabOverview"></a>
+    <a href="#policies" data-v="policies" data-t="tabPolicies"></a>
+    <a href="#proposals" data-v="proposals" data-t="tabProposals"></a>
+    <a href="#compare" data-v="compare" data-t="tabCompare"></a>
+  </nav>
+  <div class="tools"><span class="meta" id="who"></span><button class="btn" id="lang" type="button"></button><button class="btn ghost" id="signout" type="button" hidden data-t="signOut"></button></div>
+</div></header>
+<main class="pad"><div class="wrap">
+  <div id="dbBanner" class="banner" hidden></div>
+  <section id="v-login" hidden><div class="panel" style="max-width:440px;margin:40px auto">
+    <h1 data-t="lgTitle"></h1><p class="lead" data-t="lgLead"></p>
+    <div id="loginMsg" class="banner" hidden></div>
+    <form id="loginForm"><div class="field"><label for="lgEmail" data-t="lgEmail"></label><input id="lgEmail" type="email" required autocomplete="email"></div>
+    <button class="btn primary" type="submit" id="lgBtn" data-t="lgSend"></button></form>
+  </div></section>
+  <section id="v-overview" hidden>
+    <h1 data-t="ovTitle"></h1><p class="lead" data-t="ovLead"></p>
+    <div class="kpis" id="kpis"></div>
+    <h2 data-t="findingsTitle"></h2>
+    <div class="toolbar"><select id="fFilter"></select></div>
+    <div class="findings" id="findings"></div>
+  </section>
+  <section id="v-policies" hidden>
+    <h1 data-t="polTitle"></h1><p class="lead" data-t="polLead"></p>
+    <div class="legend" id="legend"></div>
+    <div class="toolbar">
+      <input type="search" id="q">
+      <select id="rvFilter"></select>
+      <select id="sortBy"></select>
+      <label><input type="checkbox" id="onlyPpl"> <span data-t="onlyPeople"></span></label>
+    </div>
+    <div class="tablewrap"><table class="list"><thead><tr id="listHead"></tr></thead><tbody id="listBody"></tbody></table></div>
+  </section>
+  <section id="v-proposals" hidden>
+    <h1 data-t="prTitle"></h1><p class="lead" data-t="prLead"></p>
+    <div class="toolbar"><select id="prFilter"></select></div>
+    <div class="props" id="allProps"></div>
+  </section>
+  <section id="v-compare" hidden>
+    <h1 data-t="cmpTitle"></h1><p class="lead" data-t="cmpLead"></p>
+    <div class="cmp"><select id="cmpA" aria-label="A"></select><select id="cmpB" aria-label="B"></select></div>
+    <div id="cmpOut"></div>
+  </section>
+</div></main>
+<div id="sheetRoot" hidden><div class="scrim" id="scrim"></div><aside class="sheet" role="dialog" aria-modal="true" id="sheet"></aside></div>
+<div class="toast" id="toast" hidden></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script>
+let DATA=[],FIND=[],META={};
+const MODS=[['Le','Leads'],['Co','Contacts'],['Un','Units'],['Pr','Properties'],['Ac','Activities'],['Ag','Agents']];
+const COLS=[['E','Everyone'],['Me','Me'],['T','My team'],['TL','Teams I lead'],['TM','Teams I manage'],['BG','Business group'],['BR','My branch'],['NP','Named people']];
+const GRIDCOLS=COLS.map(c=>c[1]).concat(['No listing agent','Unit number shown to']);
+const EN_={E:'Everyone',Me:'Me',T:'My team',TL:'Teams I lead',TM:'Teams I manage',BG:'Business group',BR:'My branch'};
+const SALE=['Primary · available','Primary · draft','Resale · available','Resale · draft','No sale type · available','No sale type · draft','Sold, as the sale agent','Sold, as the listing agent','Sale transacted by','Created by'];
+const LEASE=['Corporate owner · available','Corporate owner · draft','Individual owner · available','Individual owner · draft','No owner type · available','No owner type · draft','Leased, as the lease agent','Leased, as the listing agent','Lease transacted by','Created by'];
+const MODN={Le:'Leads',Co:'Contacts',Un:'Units',Pr:'Properties',Ac:'Activities',Ag:'Agents'};
+const GRIDROWS={Le:[['RT','Referred to'],['RB','Referred by'],['Cr','Created by']],Co:[['Cr','Created by']],Pr:[['Cr','Created by']],Ac:[['Cr','Created by'],['AT','Assigned to']],Ag:[['Agents','Agents in lists and pickers']]};
+const OPTS={Le:[['+UnassignedBranch','Also unassigned leads their branch referred'],['+UnassignedAll','Also every unassigned lead'],['The last','Active-in-period limit (The last N days)'],['Open','Lead status = Open'],['Closed','Lead status = Closed'],['Both','Lead status = Both'],['HideLeadPII','Hide the client name, source and method of contact']],Co:[['+LeadContacts','Also the contact on every lead they can see'],['HideContactPII','Hide phone numbers, email and ID details']],Pr:[['HidePropOwner',"Hide the owner's details"]],Ac:[['OnlyPartOf','Only activities they are part of (agent, creator or copied in)'],['+TeamsLead','or that involve teams they lead'],['+TeamsManage','or that involve teams they manage']],Ag:[]};
+function vals(v){const s=new Set();let np='';(v||'').split('+').forEach(t=>{t=t.trim();if(!t||t==='-')return;if(t.startsWith('NP(')){s.add('NP');np=t.slice(3,-1);}else s.add(t);});return {s,np};}
+function gridRows(mod,label,v,na){const {s,np}=vals(v);return COLS.map(([c,n])=>na.includes(n)?[mod,label+' › '+n,'N/A']:[mod,label+' › '+n,s.has(c)?('Enabled'+(c==='NP'&&np?': '+np:'')):'Disabled']);}
+function rowsFor(p){
+  if(p._rows)return p._rows;const R=[];
+  for(const k of ['Le','Co','Un','Pr','Ac','Ag']){const m=p.m[k],mod=MODN[k];
+    if(k==='Un'){const hide=m.opt.includes('HideUnitNo');
+      for(const [tag,u,labels] of [['Sale',m.S,SALE],['Lease',m.L,LEASE]]){
+        labels.forEach((lab,i)=>{const sec=i<8?`${tag} › ${tag} listings`:`${tag} › More rules`;let sc,num;
+          if(u.all){if(i<8){sc='';num=u.num;}else{sc=i===9?u.cr:'';num=null;}}else{[sc,num]=u.rows[i];}
+          if(sc==='x')sc='';const na=(i>=6&&i<=7)?['Named people']:[];
+          R.push(...gridRows(mod,`${sec} › ${lab}`,sc,na));
+          R.push([mod,`${sec} › ${lab} › No listing agent`,(i>=6)?'N/A':(vals(sc).s.has('NL')?'Enabled':'Disabled')]);
+          if(hide)R.push([mod,`${sec} › ${lab} › Unit number shown to`,i>7?'N/A':'Value: '+(EN_[num]||num||'—')]);});
+        R.push([mod,`${tag} › Hide the unit number and the owner`,hide?'Enabled':'Disabled']);
+        R.push([mod,`${tag} › Narrow by Area`,p.area?'Value: '+p.area:'Not set (any)']);}
+      continue;}
+    const g={};m.grid.split(';').map(x=>x.trim()).filter(Boolean).forEach(x=>{const [a,b]=x.split('=');g[a]=b;});
+    GRIDROWS[k].forEach(([c,l])=>R.push(...gridRows(mod,l,g[c]||'',k==='Ag'?['Me']:[])));
+    OPTS[k].forEach(([c,l])=>R.push([mod,l,m.opt.includes(c)?'Enabled':'Disabled']));
+    if(k==='Le'){const mm=(m.nar||'').match(/Active (\d+) days/);R.push([mod,'Active in – number of days','Value: '+(mm?mm[1]:'(empty)')]);
+      R.push([mod,'Narrow by Area','Not set (any)']);R.push([mod,'Narrow by Source',p.src?'Value: '+p.src:'Not set (any)']);R.push([mod,'Narrow by Method of contact','Not set (any)']);}
+    if(k==='Pr')R.push([mod,'Narrow by Area','Not set (any)']);}
+  return p._rows=R;}
+const SC={'Me':[0,'me'],'Them':[0,'me'],'Team':[1,'team'],'Their team':[1,'team'],'Teams led':[2,'tled'],'Teams managed':[2,'tman'],'Teams they manage':[2,'tman'],'Business group':[3,'bg'],'Their business group':[3,'bg'],'Branch':[4,'branch'],'Their branch':[4,'branch'],'Everyone':[5,'all'],'Nothing':[-1,'notick']};
+function scope(sum){const p=sum.split(' · ');const s=SC[p[1]]||[5,'all'];return {lvl:s[0],key:s[1],extra:p.slice(2).join(' · ')};}
+const HID=[['Le','HideLeadPII','hLead'],['Co','HideContactPII','hContact'],['Un','HideUnitNo','hUnit'],['Pr','HidePropOwner','hOwner']];
+const I18N={en:{title:'PSI Policy Permissions',subtitle:'CRM visibility policies · captured 18 Nov 2026',tabOverview:'Overview',tabPolicies:'Policies',tabProposals:'Change requests',tabCompare:'Compare',
+ ovTitle:'Policy review',ovLead:'64 CRM visibility policies, what they let people see, and the issues found. Update a finding\'s status as work progresses; everyone with access sees the same board.',
+ kPolicies:'Policies',kPeople:'People with a policy',kNoPolicy:'Active users without a policy',kReviewed:'Policies reviewed',kOpenProps:'Open change requests',kFindings:'Findings resolved',
+ findingsTitle:'Findings',all:'All',open:'Open',inprog:'In progress',done:'Done',status:'Status',owner:'Owner',note:'Note',save:'Save',saved:'Saved',
+ polTitle:'Policies',polLead:'How wide each module\'s visibility is. Open a policy to see every permission, review it, leave notes or request a change.',search:'Search policies…',onlyPeople:'Only policies with people',
+ sortPeople:'Most people',sortName:'Name',sortWide:'Widest access',rvAll:'All review states',
+ colPolicy:'Policy',colPeople:'People',colReview:'Review',colActivity:'Activity',
+ lvl:{me:'Me only',team:'My team',tled:'Teams I lead',tman:'Teams I manage',bg:'Business group',branch:'My branch',all:'Everyone',notick:'No tick'},
+ rv:{none:'Not reviewed',approved:'Approved',changes:'Needs changes'},
+ hLead:'Lead details',hContact:'Contact details',hUnit:'Unit no. & owner',hOwner:'Property owner',hiddenOn:'Hidden fields',
+ close:'Close',people:'people',review:'Review',approve:'Approve',needChanges:'Needs changes',reset:'Reset',reviewedBy:'by',
+ permissions:'Permissions',notes:'Notes',addNote:'Add note',notePh:'Write a note for this policy…',noNotes:'No notes yet.',
+ proposals:'Change requests',noProps:'No change requests yet.',propose:'Request change',proposeTitle:'Request a permission change',
+ module:'Module',permission:'Permission',current:'Current',proposed:'Proposed',reason:'Reason',submit:'Submit request',cancel:'Cancel',
+ pending:'Pending',approvedP:'Approved',rejected:'Rejected',approveP:'Approve',rejectP:'Reject',onlyEditors:'Only editors can approve or reject.',
+ prTitle:'Change requests',prLead:'Requested changes to policy permissions. Editors approve or reject; approved changes still have to be made in the CRM.',
+ cmpTitle:'Compare two policies',cmpLead:'Pick two policies to see every permission that differs.',diffCount:'permissions differ',noDiff:'These two policies are identical.',
+ enabled:'Enabled',disabled:'Disabled',legend:'Visibility:',dbOff:'Shared editing is not available in this view (signed out or not granted). You can still read everything.',
+ readOnly:'You can read this page; your role cannot save changes.',lang:'العربية',sale:'Sale',lease:'Lease',options:'Options & filters',ago:'',
+ errSave:'Could not save. Check your connection and try again.',reqd:'Pick a permission and a proposed value.',
+ noProposalPerm:'Pick a permission',signOut:'Sign out',lgTitle:'Sign in',lgLead:'Enter your work email. We\'ll send you a sign-in link; open it on this device.',lgEmail:'Work email',lgSend:'Email me a sign-in link',lg_sent:'Check your inbox for the sign-in link. It can take a minute.',lg_err:'Could not send the link',lg_denied:'Your email is not on the access list. Ask the page owner to add you.',lg_nodata:'Signed in, but the policy data could not be loaded. Ask the page owner to check the setup.',lg_config:'This site is not connected to its database yet. Fill in config.js (see README).'},
+ar:{title:'صلاحيات بوليسيات PSI',subtitle:'بوليسيات الرؤية في الـ CRM · تاريخ القراءة 18/11/2026',tabOverview:'نظرة عامة',tabPolicies:'البوليسيات',tabProposals:'طلبات التعديل',tabCompare:'مقارنة',
+ ovTitle:'مراجعة البوليسيات',ovLead:'64 بوليسي رؤية بالـ CRM، شو بتسمح للناس تشوف، والملاحظات اللي طلعت. حدّث حالة كل ملاحظة مع تقدّم الشغل، وكل اللي عندهم صلاحية بيشوفوا نفس اللوحة.',
+ kPolicies:'بوليسي',kPeople:'شخص عليه بوليسي',kNoPolicy:'مستخدم فعّال بدون بوليسي',kReviewed:'بوليسي تمت مراجعتها',kOpenProps:'طلب تعديل مفتوح',kFindings:'ملاحظة محلولة',
+ findingsTitle:'الملاحظات',all:'الكل',open:'مفتوحة',inprog:'قيد العمل',done:'تم',status:'الحالة',owner:'المسؤول',note:'ملاحظة',save:'حفظ',saved:'تم الحفظ',
+ polTitle:'البوليسيات',polLead:'مدى الرؤية بكل قسم. افتح أي بوليسي لتشوف كل الصلاحيات، وتراجعها، أو تكتب ملاحظة، أو تطلب تعديل.',search:'ابحث عن بوليسي…',onlyPeople:'بس اللي عليها أشخاص',
+ sortPeople:'الأكثر أشخاص',sortName:'الاسم',sortWide:'الأوسع صلاحية',rvAll:'كل حالات المراجعة',
+ colPolicy:'البوليسي',colPeople:'أشخاص',colReview:'المراجعة',colActivity:'نشاط',
+ lvl:{me:'هو فقط',team:'فريقه',tled:'فرق يقودها',tman:'فرق يديرها',bg:'مجموعة العمل',branch:'فرعه',all:'الكل',notick:'بدون صح'},
+ rv:{none:'لم تُراجع',approved:'معتمدة',changes:'بحاجة تعديل'},
+ hLead:'بيانات الليد',hContact:'بيانات الكونتاكت',hUnit:'رقم الوحدة والمالك',hOwner:'مالك العقار',hiddenOn:'حقول مخفية',
+ close:'إغلاق',people:'شخص',review:'المراجعة',approve:'اعتماد',needChanges:'بحاجة تعديل',reset:'إعادة',reviewedBy:'بواسطة',
+ permissions:'الصلاحيات',notes:'ملاحظات',addNote:'أضف ملاحظة',notePh:'اكتب ملاحظة على هالبوليسي…',noNotes:'ما في ملاحظات لسا.',
+ proposals:'طلبات التعديل',noProps:'ما في طلبات تعديل لسا.',propose:'اطلب تعديل',proposeTitle:'طلب تعديل صلاحية',
+ module:'القسم',permission:'الصلاحية',current:'الحالي',proposed:'المقترح',reason:'السبب',submit:'أرسل الطلب',cancel:'إلغاء',
+ pending:'بانتظار القرار',approvedP:'موافق عليه',rejected:'مرفوض',approveP:'موافقة',rejectP:'رفض',onlyEditors:'بس المحررين بيقدروا يوافقوا أو يرفضوا.',
+ prTitle:'طلبات التعديل',prLead:'التعديلات المطلوبة على صلاحيات البوليسيات. المحررين بيوافقوا أو بيرفضوا، والتعديل الموافق عليه لازم ينعمل بالـ CRM.',
+ cmpTitle:'مقارنة بوليسيتين',cmpLead:'اختار بوليسيتين لتشوف كل صلاحية مختلفة بينهم.',diffCount:'صلاحية مختلفة',noDiff:'البوليسيتين متطابقات.',
+ enabled:'مفعّلة',disabled:'غير مفعّلة',legend:'مدى الرؤية:',dbOff:'التعديل المشترك مش متاح بهالعرض (مش مسجّل دخول أو ما في صلاحية). بتقدر تقرأ كل شي.',
+ readOnly:'بتقدر تقرأ الصفحة؛ دورك ما بيسمح بحفظ تعديلات.',lang:'English',sale:'Sale',lease:'Lease',options:'خيارات وفلاتر',ago:'',
+ errSave:'ما انحفظ. تأكد من الاتصال وجرّب مرة ثانية.',reqd:'اختار صلاحية وقيمة مقترحة.',noProposalPerm:'اختار صلاحية',signOut:'تسجيل خروج',lgTitle:'تسجيل الدخول',lgLead:'اكتب إيميل الشغل، وبنبعتلك رابط دخول. افتحه من نفس الجهاز.',lgEmail:'إيميل الشغل',lgSend:'ابعتلي رابط الدخول',lg_sent:'شوف بريدك، رابط الدخول بيوصل خلال دقيقة.',lg_err:'ما قدرنا نبعت الرابط',lg_denied:'إيميلك مش ضمن قائمة الوصول. اطلب من صاحب الصفحة يضيفك.',lg_nodata:'دخلت، بس ما قدرنا نحمّل بيانات البوليسيات. اطلب من صاحب الصفحة يتأكد من الإعداد.',lg_config:'الموقع لسا مش مربوط بقاعدة البيانات. عبّي ملف config.js (شوف README).'}};
+let LANG='en';try{LANG=localStorage.getItem('lang')||'en'}catch(e){}
+const t=k=>I18N[LANG][k]??I18N.en[k]??k;
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const $=id=>document.getElementById(id);
+let BYID={};
+// ---------- shared state ----------
+const S={reviews:{},notes:[],proposals:[],decisions:{},findings:{}};
+let BANNER=null;let sb=null,me=null,canWrite=false,canDecide=false,names={};
+function toast(msg){const el=$('toast');el.textContent=msg;el.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>el.hidden=true,2200);}
+
+const who=id=>names[(id||'').toLowerCase()]||id||'—';
+const when=ts=>{try{return new Date(ts).toLocaleString(LANG==='ar'?'ar':'en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}catch(e){return ''}};
+let AUTHED=false;
+const ms=v=>v?Date.parse(v):0;
+async function loadAll(){if(!sb||!AUTHED)return;
+  const [rv,nt,pr,dc,fs]=await Promise.all(['reviews','notes','proposals','decisions','findings_status'].map(tb=>sb.from(tb).select('*')));
+  S.reviews={};(rv.data||[]).forEach(r=>S.reviews[r.policy_id]={status:r.status,by:r.by_email,at:ms(r.at)});
+  S.notes=(nt.data||[]).map(r=>({id:r.id,pid:r.policy_id,text:r.text,by:r.by_email,at:ms(r.at)}));
+  S.proposals=(pr.data||[]).map(r=>({id:r.id,pid:r.policy_id,module:r.module,perm:r.perm,current:r.current,proposed:r.proposed,reason:r.reason,by:r.by_email,at:ms(r.at)}));
+  S.decisions={};(dc.data||[]).forEach(r=>S.decisions[r.proposal_id]={decision:r.decision,by:r.by_email,at:ms(r.at)});
+  S.findings={};(fs.data||[]).forEach(r=>S.findings[r.id]={status:r.status,owner:r.owner,note:r.note,by:r.by_email,at:ms(r.at)});
+  afterData();}
+function showLogin(reason){AUTHED=false;['overview','policies','proposals','compare'].forEach(x=>$('v-'+x).hidden=true);$('tabs').hidden=true;$('v-login').hidden=false;
+  $('loginMsg').textContent=reason?t('lg_'+reason):'';$('loginMsg').hidden=!reason;
+  const showForm=reason!=='config';$('loginForm').hidden=!showForm;$('signout').hidden=!(reason==='denied'||reason==='nodata');}
+async function boot(){renderStatic();
+  const C=window.APP_CONFIG||{};
+  if(!window.supabase||!C.SUPABASE_URL||/YOUR/.test(C.SUPABASE_URL)){showLogin('config');return;}
+  sb=window.supabase.createClient(C.SUPABASE_URL,C.SUPABASE_ANON_KEY);
+  sb.auth.onAuthStateChange((ev,s)=>{if(ev==='SIGNED_IN'&&s&&!AUTHED&&!start._busy)start(s);});
+  const {data:{session}}=await sb.auth.getSession();
+  if(session)start(session);else showLogin();}
+async function start(session){start._busy=true;try{me=(session.user.email||'').toLowerCase();
+  const {data:m}=await sb.from('members').select('email,name,role');
+  const mine=(m||[]).find(x=>(x.email||'').toLowerCase()===me);
+  if(!mine){showLogin('denied');return;}
+  (m||[]).forEach(x=>names[x.email.toLowerCase()]=x.name||x.email);
+  canWrite=mine.role!=='viewer';canDecide=mine.role==='editor';BANNER=canWrite?null:'readOnly';
+  const {data:ad,error}=await sb.from('app_data').select('data').eq('id',1).single();
+  if(error||!ad){showLogin('nodata');return;}
+  DATA=ad.data.policies;FIND=ad.data.findings;META=ad.data;BYID=Object.fromEntries(DATA.map(p=>[p.id,p]));
+  AUTHED=true;$('v-login').hidden=true;$('tabs').hidden=false;$('signout').hidden=false;$('who').textContent=names[me]||me;
+  renderStatic();renderAll();await loadAll();
+  sb.channel('live').on('postgres_changes',{event:'*',schema:'public'},()=>{clearTimeout(start._t);start._t=setTimeout(loadAll,300);}).subscribe();
+  }finally{start._busy=false;}}
+let afterT=null;
+function afterData(){clearTimeout(afterT);afterT=setTimeout(()=>renderAll(true),60);}
+async function write(fn){if(!sb||!canWrite){toast(t('readOnly'));return false;}try{const r=await fn();if(r&&r.error)throw r.error;toast(t('saved'));await loadAll();return true;}catch(e){console.error(e);toast(t('errSave'));return false;}}
+// ---------- helpers ----------
+function chip(m){const s=scope(m.sum);return `<span class="chip ${s.lvl<0?'ln':'l'+s.lvl}" title="${esc(m.sum)}">${esc(t('lvl')[s.key])}</span>`;}
+function rvPill(pid){const r=S.reviews[pid];const st=r?r.status:'none';const cls={none:'p-none',approved:'p-ok',changes:'p-warn'}[st]||'p-none';return `<span class="pill ${cls}">${esc(t('rv')[st]||st)}</span>`;}
+function propStatus(p){const d=S.decisions[p.id];return d?d.decision:'pending';}
+function propPill(st){return `<span class="pill ${st==='approved'?'p-ok':st==='rejected'?'p-bad':'p-acc'}">${esc(st==='approved'?t('approvedP'):st==='rejected'?t('rejected'):t('pending'))}</span>`;}
+const wide=p=>MODS.reduce((a,[k])=>a+Math.max(0,scope(p.m[k].sum).lvl),0);
+// ---------- views ----------
+function renderStatic(){
+  document.documentElement.lang=LANG;document.documentElement.dir=LANG==='ar'?'rtl':'ltr';
+  document.querySelectorAll('[data-t]').forEach(el=>el.textContent=t(el.dataset.t));
+  $('lang').textContent=t('lang');if(!AUTHED&&!$('v-login').hidden&&$('loginMsg').dataset.k){};$('dbBanner').hidden=!BANNER;if(BANNER)$('dbBanner').textContent=t(BANNER);$('q').placeholder=t('search');
+  $('sortBy').innerHTML=[['people','sortPeople'],['name','sortName'],['wide','sortWide']].map(([v,k])=>`<option value="${v}">${esc(t(k))}</option>`).join('');
+  $('rvFilter').innerHTML=`<option value="">${esc(t('rvAll'))}</option>`+['none','approved','changes'].map(k=>`<option value="${k}">${esc(t('rv')[k])}</option>`).join('');
+  $('fFilter').innerHTML=[['','all'],['open','open'],['inprog','inprog'],['done','done']].map(([v,k])=>`<option value="${v}">${esc(t(k))}</option>`).join('');
+  $('prFilter').innerHTML=[['','all'],['pending','pending'],['approved','approvedP'],['rejected','rejected']].map(([v,k])=>`<option value="${v}">${esc(t(k))}</option>`).join('');
+  $('legend').innerHTML=`<span class="muted">${esc(t('legend'))}</span>`+[['l0','me'],['l1','team'],['l2','tled'],['l3','bg'],['l4','branch'],['l5','all'],['ln','notick']].map(([c,k])=>`<span class="chip ${c}">${esc(t('lvl')[k])}</span>`).join('');
+  $('listHead').innerHTML=`<th>${t('colPolicy')}</th><th>${t('colPeople')}</th>`+MODS.map(([,n])=>`<th>${n}</th>`).join('')+`<th>${t('hiddenOn')}</th><th>${t('colReview')}</th><th>${t('colActivity')}</th>`;
+  const opts=DATA.slice().sort((a,b)=>a.t.localeCompare(b.t)).map(p=>`<option value="${p.id}">${esc(p.t)} (${p.n})</option>`).join('');
+  const a=$('cmpA').value||'1',b=$('cmpB').value||'20';$('cmpA').innerHTML=opts;$('cmpB').innerHTML=opts;$('cmpA').value=a;$('cmpB').value=b;
+}
+function renderKpis(){
+  const reviewed=Object.values(S.reviews).filter(r=>r.status==='approved').length;
+  const openP=S.proposals.filter(p=>propStatus(p)==='pending').length;
+  const fdone=FIND.filter(f=>(S.findings[f.id]||{}).status==='done').length;
+  const k=[[DATA.length,'kPolicies'],[DATA.reduce((a,p)=>a+p.n,0),'kPeople'],[META.noPolicy||0,'kNoPolicy','alert'],[`${reviewed}/${DATA.length}`,'kReviewed','',reviewed/DATA.length],[openP,'kOpenProps'],[`${fdone}/${FIND.length}`,'kFindings','',fdone/FIND.length]];
+  $('kpis').innerHTML=k.map(([v,l,c,r])=>`<div class="kpi ${c||''}"><b>${v}</b><span>${esc(t(l))}</span>${r!==undefined?`<div class="bar"><i style="width:${Math.round(r*100)}%"></i></div>`:''}</div>`).join('');}
+function renderFindings(){
+  const fl=$('fFilter').value;
+  $('findings').innerHTML=FIND.filter(f=>!fl||((S.findings[f.id]||{}).status||'open')===fl).map(f=>{const s=S.findings[f.id]||{};const tx=f[LANG]||f.en;const st=s.status||'open';
+    return `<article class="fcard" data-f="${f.id}"><div><span class="sev ${f.sev}">${f.sev}</span><h3>${esc(tx[0])}</h3><p>${esc(tx[1])}</p><div class="rec">→ ${esc(tx[2])}</div>
+    ${f.pol.length?`<div class="counts" style="margin-top:8px;flex-wrap:wrap">${f.pol.map(id=>`<button class="btn sm ghost" data-open="${id}">${esc(BYID[id].t)}</button>`).join('')}</div>`:''}</div>
+    <div class="fside"><label for="fs-${f.id}">${t('status')}</label><select id="fs-${f.id}" ${canWrite?'':'disabled'}>${['open','inprog','done'].map(k=>`<option value="${k}" ${st===k?'selected':''}>${esc(t(k))}</option>`).join('')}</select>
+    <label for="fo-${f.id}">${t('owner')}</label><input id="fo-${f.id}" value="${esc(s.owner||'')}" ${canWrite?'':'disabled'}>
+    <label for="fn-${f.id}">${t('note')}</label><textarea id="fn-${f.id}" rows="2" ${canWrite?'':'disabled'}>${esc(s.note||'')}</textarea>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="meta">${s.by?esc(who(s.by))+' · '+esc(when(s.at)):''}</span><button class="btn sm primary" data-fsave="${f.id}" ${canWrite?'':'disabled'}>${t('save')}</button></div></div></article>`;}).join('');}
+function renderList(){
+  const q=$('q').value.trim().toLowerCase(),only=$('onlyPpl').checked,rv=$('rvFilter').value,so=$('sortBy').value;
+  let L=DATA.filter(p=>(!q||p.t.toLowerCase().includes(q))&&(!only||p.n>0)&&(!rv||((S.reviews[p.id]||{}).status||'none')===rv));
+  L.sort(so==='name'?(a,b)=>a.t.localeCompare(b.t):so==='wide'?(a,b)=>wide(b)-wide(a)||b.n-a.n:(a,b)=>b.n-a.n||a.t.localeCompare(b.t));
+  $('listBody').innerHTML=L.map(p=>{const nn=S.notes.filter(x=>x.pid===p.id).length,pp=S.proposals.filter(x=>x.pid===p.id&&propStatus(x)==='pending').length;const hid=HID.filter(([k,o])=>p.m[k].opt.includes(o)).map(([, ,l])=>t(l));
+    return `<tr data-open="${p.id}" tabindex="0"><td><div class="pname" dir="ltr">${esc(p.t)}</div></td><td class="num">${p.n}</td>`+MODS.map(([k])=>`<td>${chip(p.m[k])}</td>`).join('')+`<td class="muted" style="font-size:12px;min-width:140px">${esc(hid.join(' · ')||'—')}</td><td>${rvPill(p.id)}</td><td><div class="counts"><span title="${t('notes')}">✎ ${nn}</span><span title="${t('proposals')}">⇄ ${pp}</span></div></td></tr>`;}).join('');}
+function propCard(p,showPolicy){const st=propStatus(p);const d=S.decisions[p.id];const pol=BYID[p.pid];
+  return `<div class="prop"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center"><div>${showPolicy?`<button class="btn sm ghost" data-open="${p.pid}" style="padding-inline:0;font-weight:600">${esc(pol?pol.t:p.pid)}</button> · `:''}<span class="muted">${esc(p.module)}</span></div>${propPill(st)}</div>
+  <div class="chg">${esc(p.perm)}<br><s>${esc(p.current)}</s> → <b>${esc(p.proposed)}</b></div>${p.reason?`<div style="font-size:13px">${esc(p.reason)}</div>`:''}
+  <div class="meta">${esc(who(p.by))} · ${esc(when(p.at))}${d?` · ${esc(st==='approved'?t('approvedP'):t('rejected'))} ${t('reviewedBy')} ${esc(who(d.by))}`:''}</div>
+  ${st==='pending'?(canDecide?`<div style="display:flex;gap:6px"><button class="btn sm ok" data-dec="approved" data-pid="${p.id}">${t('approveP')}</button><button class="btn sm bad" data-dec="rejected" data-pid="${p.id}">${t('rejectP')}</button></div>`:`<div class="meta">${t('onlyEditors')}</div>`):''}</div>`;}
+function renderProposals(){const f=$('prFilter').value;const L=S.proposals.filter(p=>!f||propStatus(p)===f).sort((a,b)=>(b.at||0)-(a.at||0));$('allProps').innerHTML=L.map(p=>propCard(p,true)).join('')||`<div class="empty">${t('noProps')}</div>`;}
+function renderCompare(){const A=BYID[$('cmpA').value],B=BYID[$('cmpB').value];if(!A||!B)return;
+  const ra=rowsFor(A),rb=rowsFor(B);const mb=new Map(rb.map(r=>[r[0]+'|'+r[1],r[2]]));const diffs=ra.filter(r=>mb.get(r[0]+'|'+r[1])!==r[2]).map(r=>[r[0],r[1],r[2],mb.get(r[0]+'|'+r[1])]);
+  const cls=v=>v&&v.startsWith('Enabled')?'e':(v==='Disabled'?'d':'');
+  let h=`<div class="tablewrap" style="margin-bottom:14px"><table class="list" style="min-width:700px"><thead><tr><th></th>${MODS.map(([,n])=>`<th>${n}</th>`).join('')}</tr></thead><tbody>${[A,B].map(p=>`<tr style="cursor:default"><td class="pname" dir="ltr">${esc(p.t)}</td>${MODS.map(([k])=>`<td>${chip(p.m[k])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  h+=`<h2>${diffs.length} ${t('diffCount')}</h2>`;
+  if(!diffs.length)h+=`<div class="empty">${t('noDiff')}</div>`;
+  else MODS.forEach(([,mn])=>{const D=diffs.filter(d=>d[0]===mn);if(!D.length)return;h+=`<div class="panel" style="margin-bottom:10px"><h3>${mn} · ${D.length}</h3><div class="grid"><table class="dtable"><thead><tr><th>Permission</th><th>${esc(A.t)}</th><th>${esc(B.t)}</th></tr></thead><tbody>${D.map(d=>`<tr><td>${esc(d[1])}</td><td class="st ${cls(d[2])}">${esc(d[2])}</td><td class="st ${cls(d[3])}">${esc(d[3])}</td></tr>`).join('')}</tbody></table></div></div>`;});
+  $('cmpOut').innerHTML=h;}
+// ---------- policy sheet ----------
+let OPEN=null,MODSEL='Le',UNITTAB='Sale',PROPFORM=null;
+function stCell(v){if(v==='N/A')return '<span class="na">—</span>';if(v.startsWith('Enabled'))return `<span class="y" title="${esc(v)}">✓</span>${v.length>8?`<div class="meta">${esc(v.slice(9))}</div>`:''}`;if(v==='Disabled')return '<span class="n" title="Disabled"></span>';return esc(v.replace('Value: ',''));}
+function modulePane(p){const mn=MODN[MODSEL];let rows=rowsFor(p).filter(r=>r[0]===mn);
+  let h='';if(MODSEL==='Un'){h+=`<div class="seg">${['Sale','Lease'].map(x=>`<button type="button" data-ut="${x}" aria-pressed="${UNITTAB===x}">${t(x.toLowerCase())}</button>`).join('')}</div>`;rows=rows.filter(r=>r[1].startsWith(UNITTAB+' › '));}
+  const grid=new Map(),opts=[];
+  rows.forEach(r=>{const i=r[1].lastIndexOf(' › ');const col=i>0?r[1].slice(i+3):'';if(i>0&&GRIDCOLS.includes(col)){const rule=r[1].slice(0,i);if(!grid.has(rule))grid.set(rule,{});grid.get(rule)[col]=r;}else opts.push(r);});
+  const cols=GRIDCOLS.filter(c=>[...grid.values()].some(g=>g[c]));
+  if(grid.size){h+=`<div class="grid"><table class="tick"><thead><tr><th class="rn"></th>${cols.map(c=>`<th>${esc(c)}</th>`).join('')}<th></th></tr></thead><tbody>`;let lastSec='';
+    for(const [rule,g] of grid){const parts=rule.split(' › ');const name=parts.pop();const sec=parts.slice(MODSEL==='Un'?1:0).join(' › ');if(sec&&sec!==lastSec){h+=`<tr class="sec"><td colspan="${cols.length+2}">${esc(sec)}</td></tr>`;lastSec=sec;}
+      h+=`<tr><td class="rn">${esc(name)}</td>${cols.map(c=>`<td class="${g[c]&&g[c][2].startsWith('Value')?'v':''}">${g[c]?stCell(g[c][2]):''}</td>`).join('')}<td><button class="btn sm ghost prop-btn" data-prop="${esc(rule)}" title="${t('propose')}">⇄</button></td></tr>`;}
+    h+='</tbody></table></div>';}
+  if(opts.length)h+=`<ul class="opts">${opts.map(r=>`<li><span class="lbl">${esc(r[1].replace(/^(Sale|Lease) › /,''))}</span><span style="display:flex;gap:6px;align-items:center">${r[2].startsWith('Enabled')?`<span class="pill p-ok">${t('enabled')}</span>`:r[2]==='Disabled'?`<span class="pill p-none">${t('disabled')}</span>`:`<span class="num" style="font-size:12px;direction:ltr">${esc(r[2].replace('Value: ',''))}</span>`}<button class="btn sm ghost prop-btn" data-prop="${esc(r[1])}" title="${t('propose')}">⇄</button></span></li>`).join('')}</ul>`;
+  return h;}
+function propFormHTML(p){const f=PROPFORM;const rows=rowsFor(p).filter(r=>r[0]===f.module&&(r[1]===f.rule||r[1].startsWith(f.rule+' › ')));
+  const sel=rows.find(r=>r[1]===f.perm)||null;
+  return `<div class="panel" style="margin-top:12px;border-color:var(--accent)"><h3>${t('proposeTitle')}</h3>
+  <div class="field"><label for="pfPerm">${t('permission')}</label><select id="pfPerm"><option value="">${t('noProposalPerm')}</option>${rows.map(r=>`<option value="${esc(r[1])}" ${f.perm===r[1]?'selected':''}>${esc(r[1])} — ${esc(r[2])}</option>`).join('')}</select></div>
+  <div class="field"><label>${t('current')}</label><div class="num" style="font-size:12.5px">${esc(sel?sel[2]:'—')}</div></div>
+  <div class="field"><label for="pfNew">${t('proposed')}</label>${sel&&/^(Enabled|Disabled)/.test(sel[2])?`<select id="pfNew"><option>${sel[2].startsWith('Enabled')?'Disabled':'Enabled'}</option></select>`:`<input id="pfNew" value="${esc(f.proposed||'')}">`}</div>
+  <div class="field"><label for="pfWhy">${t('reason')}</label><textarea id="pfWhy" rows="2">${esc(f.reason||'')}</textarea></div>
+  <div style="display:flex;gap:8px"><button class="btn primary" id="pfSubmit" ${canWrite?'':'disabled'}>${t('submit')}</button><button class="btn" id="pfCancel">${t('cancel')}</button></div></div>`;}
+function renderSheet(){const p=BYID[OPEN];if(!p){$('sheetRoot').hidden=true;return;}$('sheetRoot').hidden=false;
+  const r=S.reviews[p.id];const notes=S.notes.filter(n=>n.pid===p.id).sort((a,b)=>(a.at||0)-(b.at||0));const props=S.proposals.filter(x=>x.pid===p.id).sort((a,b)=>(b.at||0)-(a.at||0));
+  const keepNote=$('noteTxt')?$('noteTxt').value:'';
+  $('sheet').innerHTML=`<div class="sheethead pad"><div style="flex:1;min-width:0"><h2 dir="ltr" style="text-align:start">${esc(p.t)}</h2><div class="meta">ID ${p.id} · ${p.n} ${t('people')}</div></div><button class="btn" id="closeSheet">${t('close')} ✕</button></div>
+  <div class="sheetbody pad"><div class="cols"><div style="min-width:0"><div class="panel"><h3>${t('permissions')}</h3>
+   <div class="modtabs">${MODS.map(([k,n])=>`<button type="button" data-mod="${k}" aria-pressed="${MODSEL===k}">${n} ${chip(p.m[k])}</button>`).join('')}</div>
+   <div class="meta" style="margin-bottom:8px;direction:ltr;text-align:start">${esc(p.m[MODSEL].sum)}</div>${modulePane(p)}${PROPFORM?propFormHTML(p):''}</div></div>
+  <div style="display:grid;gap:12px;align-content:start;min-width:0">
+   <div class="panel"><h3>${t('review')}</h3><div style="margin-bottom:8px">${rvPill(p.id)}</div>${r&&r.by?`<div class="meta" style="margin-bottom:8px">${t('reviewedBy')} ${esc(who(r.by))} · ${esc(when(r.at))}</div>`:''}
+    <div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn sm ok" data-rv="approved" ${canWrite?'':'disabled'}>${t('approve')}</button><button class="btn sm bad" data-rv="changes" ${canWrite?'':'disabled'}>${t('needChanges')}</button>${r?`<button class="btn sm" data-rv="none" ${canWrite?'':'disabled'}>${t('reset')}</button>`:''}</div></div>
+   <div class="panel"><h3>${t('proposals')} · ${props.length}</h3><div class="props">${props.map(x=>propCard(x,false)).join('')||`<div class="empty">${t('noProps')}</div>`}</div></div>
+   <div class="panel"><h3>${t('notes')} · ${notes.length}</h3><div class="thread">${notes.map(n=>`<div class="msg"><div class="who">${esc(who(n.by))} <span class="meta">· ${esc(when(n.at))}</span></div><div class="txt">${esc(n.text)}</div></div>`).join('')||`<div class="empty">${t('noNotes')}</div>`}</div>
+    <div class="field" style="margin-top:10px"><textarea id="noteTxt" rows="3" placeholder="${esc(t('notePh'))}" ${canWrite?'':'disabled'}>${esc(keepNote)}</textarea></div><button class="btn sm primary" id="noteAdd" ${canWrite?'':'disabled'}>${t('addNote')}</button></div>
+  </div></div></div>`;}
+// ---------- routing ----------
+function view(){const h=(location.hash||'#overview').slice(1);const v=['overview','policies','proposals','compare'].includes(h)?h:(h.startsWith('p-')?'policies':'overview');
+  ['overview','policies','proposals','compare'].forEach(x=>$('v-'+x).hidden=x!==v);document.querySelectorAll('#tabs a').forEach(a=>a.setAttribute('aria-current',a.dataset.v===v?'page':'false'));
+  if(h.startsWith('p-')&&BYID[h.slice(2)]&&OPEN!==+h.slice(2)){OPEN=+h.slice(2);MODSEL='Le';PROPFORM=null;}
+  return v;}
+function renderAll(fromData){if(!AUTHED)return;const v=view();renderKpis();if(v==='overview'&&!(fromData&&document.activeElement&&document.activeElement.closest('.fcard')))renderFindings();if(v==='policies')renderList();if(v==='proposals')renderProposals();if(v==='compare')renderCompare();
+  if(OPEN&&!(fromData&&document.activeElement&&document.activeElement.closest('#sheet')&&['TEXTAREA','INPUT','SELECT'].includes(document.activeElement.tagName)))renderSheet();}
+function openPolicy(id){OPEN=+id;MODSEL='Le';UNITTAB='Sale';PROPFORM=null;renderSheet();}
+function closeSheet(){OPEN=null;PROPFORM=null;$('sheetRoot').hidden=true;if(location.hash.startsWith('#p-'))location.hash='#policies';}
+// ---------- events ----------
+document.addEventListener('click',async e=>{
+  const o=e.target.closest('[data-open]');if(o&&!e.target.closest('[data-prop]')){openPolicy(o.dataset.open);return;}
+  if(e.target.closest('#closeSheet')||e.target.id==='scrim'){closeSheet();return;}
+  const md=e.target.closest('[data-mod]');if(md){MODSEL=md.dataset.mod;PROPFORM=null;renderSheet();return;}
+  const ut=e.target.closest('[data-ut]');if(ut){UNITTAB=ut.dataset.ut;renderSheet();return;}
+  const pr=e.target.closest('[data-prop]');if(pr){const rule=pr.dataset.prop;const p=BYID[OPEN];const isOpt=rowsFor(p).some(r=>r[0]===MODN[MODSEL]&&r[1]===rule);PROPFORM={module:MODN[MODSEL],rule,perm:isOpt?rule:''};renderSheet();$('pfPerm')&&$('pfPerm').focus();return;}
+  if(e.target.id==='pfCancel'){PROPFORM=null;renderSheet();return;}
+  if(e.target.id==='pfSubmit'){const p=BYID[OPEN];const perm=$('pfPerm').value,nv=$('pfNew').value.trim();if(!perm||!nv){toast(t('reqd'));return;}const cur=(rowsFor(p).find(r=>r[0]===PROPFORM.module&&r[1]===perm)||[])[2]||'';
+    const ok=await write(()=>sb.from('proposals').insert({policy_id:p.id,module:PROPFORM.module,perm,current:cur,proposed:nv,reason:$('pfWhy').value.trim().slice(0,1000),by_email:me}));if(ok){PROPFORM=null;renderSheet();}return;}
+  const rv=e.target.closest('[data-rv]');if(rv){const st=rv.dataset.rv;await write(()=>st==='none'?sb.from('reviews').delete().eq('policy_id',OPEN):sb.from('reviews').upsert({policy_id:OPEN,status:st,by_email:me,at:new Date().toISOString()}));return;}
+  if(e.target.id==='noteAdd'){const tx=$('noteTxt').value.trim();if(!tx)return;const ok=await write(()=>sb.from('notes').insert({policy_id:OPEN,text:tx.slice(0,2000),by_email:me}));if(ok){$('noteTxt').value='';renderSheet();}return;}
+  const dc=e.target.closest('[data-dec]');if(dc){if(!canDecide){toast(t('onlyEditors'));return;}await write(()=>sb.from('decisions').upsert({proposal_id:dc.dataset.pid,decision:dc.dataset.dec,by_email:me,at:new Date().toISOString()}));return;}
+  const fs=e.target.closest('[data-fsave]');if(fs){const id=fs.dataset.fsave;await write(()=>sb.from('findings_status').upsert({id,status:$('fs-'+id).value,owner:$('fo-'+id).value.trim().slice(0,120),note:$('fn-'+id).value.trim().slice(0,1000),by_email:me,at:new Date().toISOString()}));return;}
+  if(e.target.id==='lang'){LANG=LANG==='en'?'ar':'en';try{localStorage.setItem('lang',LANG)}catch(_){}renderStatic();renderAll();}
+});
+document.addEventListener('change',e=>{if(e.target.id==='pfPerm'){PROPFORM.perm=e.target.value;PROPFORM.reason=$('pfWhy').value;renderSheet();}
+  if(['cmpA','cmpB'].includes(e.target.id))renderCompare();if(['rvFilter','sortBy','onlyPpl'].includes(e.target.id))renderList();if(e.target.id==='fFilter')renderFindings();if(e.target.id==='prFilter')renderProposals();});
+$('q').addEventListener('input',renderList);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&OPEN)closeSheet();if(e.key==='Enter'&&e.target.matches('tr[data-open]'))openPolicy(e.target.dataset.open);});
+window.addEventListener('hashchange',()=>renderAll());
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();const em=$('lgEmail').value.trim().toLowerCase();if(!em||!sb)return;$('lgBtn').disabled=true;
+  const {error}=await sb.auth.signInWithOtp({email:em,options:{emailRedirectTo:location.origin+location.pathname}});$('lgBtn').disabled=false;
+  $('loginMsg').hidden=false;$('loginMsg').textContent=error?t('lg_err')+' ('+error.message+')':t('lg_sent');});
+$('signout').addEventListener('click',async()=>{if(sb)await sb.auth.signOut();location.hash='';location.reload();});
+boot();
+</script>
+
+</body></html>
