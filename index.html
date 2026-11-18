@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow">
 <title>Policy Manager · PSI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <style>/* Layout: enterprise console — dark navigation rail on the start side, top bar with global search and alerts, content as data grids and panels */
 :root{
   --bg:#f3f5f8; --panel:#ffffff; --panel2:#f8f9fb; --hover:#f1f4f8; --sel:#e8effa;
@@ -182,7 +182,7 @@ html[lang="ar"] .sec{letter-spacing:0}
 .rr.cmp{grid-template-columns:minmax(150px,.9fr) minmax(0,1.3fr) minmax(0,1.3fr)}
 .rr .k{font-size:13.5px;direction:ltr;text-align:start;min-width:0;overflow-wrap:anywhere}
 .rr .k small{display:block;color:var(--ink3);font-size:11.5px}
-.rr.hd{background:var(--panel2);font-size:11.5px;font-weight:600;color:var(--ink2);position:sticky;top:56px;z-index:2}
+.rr.rhd{background:var(--panel2);font-size:11.5px;font-weight:600;color:var(--ink2);position:sticky;top:56px;z-index:2}
 .rr.add{background:var(--add-bg)}.rr.rem{background:var(--rem-bg)}.rr.mod{background:var(--mod-bg)}
 .rr.add .k{box-shadow:inset 3px 0 0 var(--add)}.rr.rem .k{box-shadow:inset 3px 0 0 var(--rem)}.rr.mod .k{box-shadow:inset 3px 0 0 var(--mod)}
 .rr .k{padding-inline-start:6px}
@@ -210,7 +210,7 @@ html[lang="ar"] .sec{letter-spacing:0}
 .colhd{display:flex;align-items:center;gap:8px}
 .lock{font-size:11px;color:var(--ink3);font-weight:500}
 .saved{font-size:12px;color:var(--ink3)}
-@media (max-width:860px){.rr,.rr.cmp{grid-template-columns:1fr}.rr.hd{display:none}.rr .cur::before{content:attr(data-l);display:block;font-size:11px;color:var(--ink3)}.rr .drf::before{content:attr(data-l);display:block;font-size:11px;color:var(--ink3)}}
+@media (max-width:860px){.rr,.rr.cmp{grid-template-columns:1fr}.rr.rhd{display:none}.rr .cur::before{content:attr(data-l);display:block;font-size:11px;color:var(--ink3)}.rr .drf::before{content:attr(data-l);display:block;font-size:11px;color:var(--ink3)}}
 /* modal */
 .scrim{position:fixed;inset:0;background:rgba(9,14,23,.45);z-index:60;display:grid;place-items:center;padding:16px}
 .modal{background:var(--panel);border-radius:10px;box-shadow:var(--shadow);width:min(760px,100%);max-height:calc(100vh - 32px);display:flex;flex-direction:column;overflow:hidden}
@@ -322,6 +322,188 @@ html[dir="rtl"] .toast{transform:translateX(50%)}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 [hidden]{display:none!important}
+
+/* ===== Visual refresh: "Reach" — calm surfaces, one royal-blue accent, access scope shown as concentric reach rings from green (private) to rose (everyone) ===== */
+:root{
+  --bg:#f4f6f9; --panel:#ffffff; --panel2:#f8fafc; --hover:#f3f6fb; --sel:#eef3ff;
+  --ink:#0f172a; --ink2:#475569; --ink3:#94a3b8; --line:#e6eaf0; --line2:#eff2f6;
+  --accent:#2b59c3; --accent2:#2149a6; --accent-soft:#ebf0fd;
+  --rail:#0b1324; --rail2:#16213a; --rail-ink:#cbd5e1; --rail-ink2:#7c8aa5; --rail-acc:#7aa2ff;
+  --r0:#059669; --r1:#0d9488; --r2:#0891b2; --r3:#2563eb; --r4:#d97706; --r5:#e11d48; --rn:#94a3b8;
+  --sh1:0 1px 2px rgba(15,23,42,.04),0 1px 3px rgba(15,23,42,.04);
+  --sh2:0 1px 2px rgba(15,23,42,.05),0 8px 24px -6px rgba(15,23,42,.08);
+  --sans:"Plus Jakarta Sans","IBM Plex Sans Arabic",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --ar:"IBM Plex Sans Arabic","Plus Jakarta Sans",system-ui,Tahoma,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --rad:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0a0f1a; --panel:#111827; --panel2:#0e1522; --hover:#162033; --sel:#18264a; --ink:#e8edf5; --ink2:#a3b0c4; --ink3:#66748b; --line:#1f2a3c; --line2:#182233;
+  --accent:#7aa2ff; --accent2:#9bb9ff; --accent-soft:#17244a; --rail:#060a12; --rail2:#121c31;
+  --r0:#34d399; --r1:#2dd4bf; --r2:#22d3ee; --r3:#60a5fa; --r4:#fbbf24; --r5:#fb7185; --rn:#64748b;
+  --sh1:0 1px 2px rgba(0,0,0,.3); --sh2:0 1px 2px rgba(0,0,0,.3),0 8px 24px -6px rgba(0,0,0,.45)}}
+:root[data-theme="dark"]{
+  --bg:#0a0f1a; --panel:#111827; --panel2:#0e1522; --hover:#162033; --sel:#18264a; --ink:#e8edf5; --ink2:#a3b0c4; --ink3:#66748b; --line:#1f2a3c; --line2:#182233;
+  --accent:#7aa2ff; --accent2:#9bb9ff; --accent-soft:#17244a; --rail:#060a12; --rail2:#121c31;
+  --r0:#34d399; --r1:#2dd4bf; --r2:#22d3ee; --r3:#60a5fa; --r4:#fbbf24; --r5:#fb7185; --rn:#64748b;
+  --sh1:0 1px 2px rgba(0,0,0,.3); --sh2:0 1px 2px rgba(0,0,0,.3),0 8px 24px -6px rgba(0,0,0,.45)}
+body{font-size:14px;letter-spacing:-.005em;-webkit-font-smoothing:antialiased}
+html[lang="ar"] body{letter-spacing:0}
+/* reach chip */
+.reach{--c:var(--rn);display:inline-flex;align-items:center;gap:7px;padding:3px 10px 3px 4px;border-radius:999px;background:color-mix(in srgb,var(--c) 10%,transparent);color:var(--c);font-size:12.5px;font-weight:600;white-space:nowrap;line-height:1.3}
+html[dir="rtl"] .reach{padding:3px 4px 3px 10px}
+.reach span{color:color-mix(in srgb,var(--c) 78%,var(--ink))}
+.reach .rg{width:20px;height:20px;flex-shrink:0;display:block}
+.reach.only{padding:2px;background:none}
+.reach.r0{--c:var(--r0)}.reach.r1{--c:var(--r1)}.reach.r2{--c:var(--r2)}.reach.r3{--c:var(--r3)}.reach.r4{--c:var(--r4)}.reach.r5{--c:var(--r5)}.reach.rn{--c:var(--rn)}
+.reach.rn span{font-weight:500}
+/* rail */
+.rail{background:linear-gradient(180deg,#0b1324 0%,#0f1a31 100%);border-inline-end:1px solid rgba(255,255,255,.04)}
+.logo{padding:6px 10px 22px}
+.logo .mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(145deg,#4f7dff,#2b59c3);box-shadow:0 6px 16px -4px rgba(79,125,255,.6)}
+.logo .mark svg{width:19px;height:19px}
+.navsec{font-size:10.5px;letter-spacing:.1em;padding:16px 12px 8px;font-weight:600}
+.nav a{padding:9px 12px;border-radius:10px;font-weight:500;margin:1px 0;transition:background .15s,color .15s}
+.nav a svg{opacity:.7}
+.nav a[aria-current="page"]{background:rgba(122,162,255,.13);color:#fff;box-shadow:none}
+.nav a[aria-current="page"] svg{opacity:1;color:var(--rail-acc)}
+html[dir="rtl"] .nav a[aria-current="page"]{box-shadow:none}
+.nav .cnt{background:rgba(255,255,255,.1);border-radius:999px;padding:0 8px}
+.nav .cnt.hot{background:#f59e0b;color:#1b1203}
+.railfoot{border-top:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;gap:2px;padding:14px 12px 4px}
+/* top bar */
+.top{background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:saturate(160%) blur(14px);border-bottom:1px solid transparent;min-height:64px}
+.gsearch{border-radius:999px;background:var(--panel);box-shadow:var(--sh1);border-color:var(--line);padding:9px 14px}
+.gsearch kbd{border-radius:6px;background:var(--panel2)}
+.ib{border-radius:10px}
+/* page */
+.content{padding-top:28px}
+.ph h1{font-size:26px;font-weight:700;letter-spacing:-.025em}
+html[lang="ar"] .ph h1{letter-spacing:0}
+.ph .sub{font-size:14.5px}
+.crumbs a:hover{color:var(--accent)}
+/* buttons + inputs */
+.btn{border-radius:10px;padding:8px 14px;font-weight:600;box-shadow:var(--sh1);transition:transform .08s,background .15s,border-color .15s}
+.btn:active{transform:translateY(1px)}
+.btn.pri{background:linear-gradient(180deg,#3a68d6,#2b59c3);border-color:#2850b5;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 4px 12px -4px rgba(43,89,195,.55)}
+.btn.pri:hover{background:linear-gradient(180deg,#3360cb,#244db0)}
+.btn.ok{background:linear-gradient(180deg,#16a34a,#15803d);border-color:#15803d;box-shadow:0 4px 12px -4px rgba(22,163,74,.5)}
+.btn.ghost,.btn.sm{box-shadow:none}
+.inp{border-radius:10px;padding:8px 12px;background:var(--panel)}
+.search input{padding-inline-start:34px}
+.fchip{padding:5px 12px;border-radius:999px;font-weight:600;background:var(--panel);transition:all .15s}
+.fchip:hover{border-color:var(--ink3)}
+.fchip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--panel)}
+.cdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c)}
+.seg{border-radius:10px;padding:3px;background:var(--panel2);gap:2px}
+.seg button{border-radius:7px;padding:5px 12px;font-weight:600}
+.seg button+button{border:0}
+.seg button[aria-pressed="true"]{background:var(--panel);color:var(--ink);box-shadow:var(--sh1)}
+/* panels */
+.panel{border-radius:var(--rad);box-shadow:var(--sh2);border-color:var(--line)}
+.panel>.hd{padding:14px 18px}
+.panel>.hd h2{font-size:14.5px;font-weight:700}
+.tbar{padding:12px 16px;gap:10px}
+/* KPIs */
+.kpis{gap:14px;margin-bottom:22px}
+.kpi{display:flex;gap:14px;align-items:flex-start;border-radius:var(--rad);box-shadow:var(--sh2);padding:18px}
+.kpi .ki{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex-shrink:0}
+.kpi .ki svg{width:20px;height:20px}
+.k-total{background:#eef2ff;color:#4338ca}.k-active{background:#ecfdf5;color:#047857}.k-recent{background:#eff6ff;color:#1d4ed8}.k-pending{background:#fff7ed;color:#c2410c}.k-last{background:#f1f5f9;color:#334155}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .ki{background:var(--panel2)!important;color:var(--accent)!important}}
+:root[data-theme="dark"] .ki{background:var(--panel2)!important;color:var(--accent)!important}
+.kpi .kt{min-width:0}
+.kpi .l{font-size:12.5px;font-weight:600;color:var(--ink2)}
+.kpi .v{font-family:var(--sans);font-size:28px;font-weight:800;letter-spacing:-.03em;margin-top:2px}
+.kpi.date .v{font-size:18px;margin-top:6px}
+.kpi.warn .v{color:#c2410c}
+/* table */
+.dg th{background:transparent;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);padding:12px 14px;border-bottom:1px solid var(--line)}
+html[lang="ar"] .dg th{text-transform:none;letter-spacing:0;font-size:12px}
+.dg td{padding:12px 14px;border-bottom:1px solid var(--line2)}
+.dg tbody tr.click{transition:background .12s}
+.dg .pn{font-weight:700;font-size:13.5px}
+.pcell{display:flex;align-items:center;gap:12px;min-width:0}
+.pcell.big .av{width:48px;height:48px;font-size:16px;border-radius:14px}
+.av{--c:#64748b;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex-shrink:0;font-size:12px;font-weight:800;letter-spacing:.02em;color:var(--c);background:color-mix(in srgb,var(--c) 13%,transparent);border:1px solid color-mix(in srgb,var(--c) 22%,transparent)}
+.vbadge{border-radius:6px;font-weight:600}
+.num{font-weight:600}
+/* cards */
+.cards{gap:14px;padding:16px}
+.pcard{border-radius:var(--rad);box-shadow:var(--sh1);transition:box-shadow .15s,border-color .15s,transform .15s;padding:16px}
+.pcard:hover{box-shadow:var(--sh2);transform:translateY(-1px);border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+.mods{gap:10px 12px}
+.mods .ml{font-weight:700;margin-bottom:3px}
+/* module nav, permission rows */
+.modnav{background:var(--panel);border:1px solid var(--line);border-radius:var(--rad);padding:6px;box-shadow:var(--sh1)}
+.modnav button{border-radius:9px;padding:9px 10px;font-weight:600}
+.modnav button[aria-selected="true"]{background:var(--sel);color:var(--accent)}
+.rr{padding:11px 18px}
+.sec{padding:12px 18px 6px;letter-spacing:.08em}
+.pill{border-radius:999px;padding:3px 10px;font-weight:600}
+.pill.on{background:var(--accent-soft);color:var(--accent)}
+.sw{width:38px;height:22px;border-radius:11px}
+.sw::after{width:18px;height:18px}
+.sw.on::after{inset-inline-start:18px}
+.edbar{border-radius:var(--rad);box-shadow:var(--sh2);top:72px}
+.cn{border-radius:999px;padding:5px 12px}
+.tabs button{font-weight:600;padding:10px 16px}
+.st{padding:3px 10px}
+/* matrix */
+.mx th,.mx td{padding:8px 12px}
+.mx thead th{background:var(--panel2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink3)}
+.heat5{background:transparent}
+.mx .y{color:var(--r0)}
+/* overlays */
+.modal{border-radius:18px}
+.drawer{border-start-start-radius:18px;border-end-start-radius:18px}
+.toast{border-radius:999px;padding:11px 18px;font-weight:600}
+/* login */
+.login{background:radial-gradient(1200px 600px at 10% -10%,#dbe6ff 0%,transparent 60%),radial-gradient(900px 500px at 110% 110%,#ffe4ec 0%,transparent 55%),var(--bg)}
+.login .box{border-radius:20px;box-shadow:var(--sh2);padding:32px}
+@media (prefers-reduced-motion:reduce){.pcard:hover{transform:none}}
+
+.legendrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:10px 16px;border-bottom:1px solid var(--line2);font-size:12px;color:var(--ink3);font-weight:600}
+.legendrow>span:first-child{margin-inline-end:6px;text-transform:uppercase;letter-spacing:.06em;font-size:11px}
+.legendrow .reach{font-size:12px}
+.legendrow .arr{font-style:normal;color:var(--ink3);opacity:.6}
+html[dir="rtl"] .legendrow .arr{transform:scaleX(-1);display:inline-block}
+.dg td:first-child{min-width:270px}
+
+@media (max-width:640px){.kpi{flex-direction:column;gap:10px;padding:14px}.kpi .v{font-size:24px}.kpi .ki{width:34px;height:34px;border-radius:10px}.ph h1{font-size:22px}}
+
+/* compare page */
+.cmppick{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;padding:16px}
+.cmpsel{width:100%;padding:10px 12px;font-weight:600}
+.swap{border:1px solid var(--line);background:var(--panel2);width:40px;height:40px;justify-content:center;border-radius:999px}
+.swap:hover{color:var(--accent);border-color:var(--accent)}
+.cmpsugg{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:0 16px 16px;font-size:12.5px}
+.cmphead{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:stretch;margin-bottom:16px}
+.cmpcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--rad);box-shadow:var(--sh2);padding:16px 18px;position:relative;overflow:hidden;min-width:0}
+.cmpcard::before{content:"";position:absolute;inset-block:0;inset-inline-start:0;width:4px;background:var(--ca)}
+.cmpcard.a{--ca:#2b59c3}.cmpcard.b{--ca:#e11d48}
+.cmpcard .side{display:inline-block;font-size:11px;font-weight:800;color:#fff;background:var(--ca);border-radius:6px;padding:0 7px;margin-bottom:4px}
+.cmpcard .pn{display:block;font-weight:700;font-size:15.5px;color:var(--ink)}
+.cmpcard .pc{font-size:12.5px;color:var(--ink3);margin-top:2px}
+.cmpstats{display:grid;grid-template-columns:repeat(2,minmax(90px,1fr));gap:8px;align-content:center}
+.cmpstats div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 12px;text-align:center;box-shadow:var(--sh1)}
+.cmpstats b{display:block;font-size:20px;font-weight:800;letter-spacing:-.02em}
+.cmpstats span{font-size:11.5px;color:var(--ink3);font-weight:600}
+.cmpstats .ok{color:var(--r0)}.cmpstats .ia{color:#2b59c3}.cmpstats .ib2{color:#e11d48}.cmpstats .md{color:var(--mod)}
+.cmprows{display:grid}
+.cmprow{display:grid;grid-template-columns:110px 1fr 150px 1fr 130px;gap:10px;align-items:center;padding:10px 18px;border:0;border-bottom:1px solid var(--line2);background:none;text-align:start;width:100%;font:inherit;color:inherit}
+.cmprow:last-child{border-bottom:0}
+button.cmprow:hover{background:var(--hover)}
+.cmprow.sel{background:var(--sel)}
+.cmprow.hdr{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink3);font-weight:700;padding-block:10px 6px}
+.cmprow .mname{font-weight:700}
+.cmprow .dn{font-size:12.5px;color:var(--ink2);text-align:end}
+.cmprow .dn b{color:var(--mod)}
+.verd{display:inline-block;font-size:11.5px;font-weight:700;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.verd.eq{background:var(--panel2);color:var(--ink3)}.verd.wa{background:#ebf0fd;color:#2b59c3}.verd.wb{background:#ffe4ea;color:#be123c}
+.segn{display:inline-block;background:var(--mod-bg);color:var(--mod);border-radius:999px;font-size:10.5px;padding:0 6px;margin-inline-start:4px}
+.cmplegend{display:flex;gap:8px;flex-wrap:wrap;padding:10px 18px;border-bottom:1px solid var(--line2);font-size:12px}
+@media (max-width:860px){.cmppick,.cmphead{grid-template-columns:1fr}.swap{justify-self:center;transform:rotate(90deg)}.cmprow{grid-template-columns:1fr 1fr;row-gap:6px}.cmprow .vs,.cmprow .dn{text-align:start}.cmprow.hdr{display:none}.cmpstats{grid-template-columns:repeat(4,1fr)}}
 </style></head>
 <body><div id="app"></div><div id="toast" class="toast" hidden></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
@@ -367,7 +549,7 @@ en:{appName:'Policy Manager',appSub:'PSI CRM · Access governance',
  roleHelp:{viewer:'Reads everything',requester:'Creates and submits change requests',approver:'Approves or rejects requests',implementer:'Marks approved requests as implemented',admin:'Everything, plus members and settings'},
  lgTitle:'Sign in',lgLead:'Enter your work email and we’ll send you a sign-in link.',lgSend:'Email me a sign-in link',lg_sent:'Check your inbox for the sign-in link.',lg_err:'Could not send the link',lg_denied:'Your email is not on the access list. Ask an admin to add you.',lg_nodata:'Signed in, but the data could not be loaded. Run the v3 database update.',lg_config:'This site is not connected to its database yet. Fill in config.js.',
  err:'Something went wrong',done_:'Done',loading:'Loading…',back:'Back',of:'of',rows:'rows',view:'View',
- pgPolicies:'Policies',pgRequests:'Requests',pgPerms:'Permissions',pgPages:'Pages'},
+ pgPolicies:'Policies',compare:'Compare policies',compareWith:'Compare',cmpSub:'Pick two policies to see how far each one reaches and every permission that differs.',cmpPick:'Choose a policy…',swap:'Swap A and B',cmpTry:'Try:',identical:'identical',onlyA:'only in A',onlyB:'only in B',diffVals:'different values',reachByModule:'Reach by module',clickModule:'Click a module to see its differences',sameReach:'same reach',wider:'reaches further',diffs:'differences',alignA:'Make A match B…',alignHelp:'Opens a change request on A with B’s permissions as the draft. Nothing changes until it is approved and implemented.',lgOnlyB:'Only B has it',lgOnlyA:'Only A has it',lgDiffVal:'Different value',pgRequests:'Requests',pgPerms:'Permissions',pgPages:'Pages'},
 ar:{appName:'إدارة البوليسيات',appSub:'PSI CRM · حوكمة الصلاحيات',
  navMain:'مساحة العمل',navGov:'الحوكمة',navAdmin:'الإدارة',
  dashboard:'لوحة التحكم',matrix:'مصفوفة الصلاحيات',requests:'طلبات التعديل',audit:'سجل التدقيق',findings:'الملاحظات',admin:'الأعضاء والإعدادات',
@@ -408,7 +590,7 @@ ar:{appName:'إدارة البوليسيات',appSub:'PSI CRM · حوكمة ال
  roleHelp:{viewer:'بيقرأ كل شي',requester:'بيعمل ويرسل طلبات تعديل',approver:'بيعتمد أو يرفض الطلبات',implementer:'بيعلّم الطلبات المعتمدة كمنفّذة',admin:'كل شي، وكمان الأعضاء والإعدادات'},
  lgTitle:'تسجيل الدخول',lgLead:'اكتب إيميل الشغل وبنبعتلك رابط دخول.',lgSend:'ابعتلي رابط الدخول',lg_sent:'شوف بريدك، الرابط بيوصل خلال دقيقة.',lg_err:'ما قدرنا نبعت الرابط',lg_denied:'إيميلك مش ضمن القائمة. اطلب من المدير يضيفك.',lg_nodata:'دخلت، بس ما قدرنا نحمّل البيانات. شغّل تحديث قاعدة البيانات v3.',lg_config:'الموقع مش مربوط بقاعدة البيانات. عبّي config.js.',
  err:'صار خطأ',done_:'تم',loading:'عم يحمّل…',back:'رجوع',of:'من',rows:'صف',view:'عرض',
- pgPolicies:'البوليسيات',pgRequests:'الطلبات',pgPerms:'الصلاحيات',pgPages:'الصفحات'}};
+ pgPolicies:'البوليسيات',compare:'مقارنة البوليسيات',compareWith:'قارن',cmpSub:'اختار بوليسيتين لتشوف مدى وصول كل وحدة، وكل صلاحية مختلفة بينهم.',cmpPick:'اختار بوليسي…',swap:'بدّل A و B',cmpTry:'جرّب:',identical:'متطابقة',onlyA:'بس عند A',onlyB:'بس عند B',diffVals:'قيم مختلفة',reachByModule:'مدى الوصول لكل قسم',clickModule:'اكبس على قسم لتشوف الاختلافات',sameReach:'نفس المدى',wider:'أوسع',diffs:'اختلاف',alignA:'خلّي A زي B…',alignHelp:'بيفتح طلب تعديل على A ومسودته صلاحيات B. ما بيتغيّر شي إلا بعد الاعتماد والتنفيذ.',lgOnlyB:'موجودة بس عند B',lgOnlyA:'موجودة بس عند A',lgDiffVal:'قيمة مختلفة',pgRequests:'الطلبات',pgPerms:'الصلاحيات',pgPages:'الصفحات'}};
 
 // ===================== core: helpers, model, data =====================
 let LANG='en';try{LANG=localStorage.getItem('lang')||'en'}catch(e){}
@@ -430,6 +612,8 @@ const ICON={
  menu:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>',
  x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+ cmp:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="7" height="16" rx="1.5"/><rect x="14" y="4" width="7" height="16" rx="1.5"/><path d="M10 9h4M10 15h4"/></svg>',
+ swap:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></svg>',
  globe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>'};
 // ---------- permission model ----------
 const MODULES=['Leads','Contacts','Units','Properties','Activities','Agents'];
@@ -456,8 +640,14 @@ function scope(perms,mod){let lv=null,col=null;
   else{for(const r of ROWS[mod]){const [w,c]=widest(perms,`${mod}|${r}`);if(w!==null&&(lv===null||w<lv)){lv=w;col=c;}}}
   if(lv===null)return {lvl:-1,key:'notick'};
   const key={'Everyone':'all','My branch':'branch','Business group':'bg','Teams I manage':'tman','Teams I lead':'tled','My team':'team','Named people':'named','Me':'me'}[col];return {lvl:lv,key};}
-const BARS={'-1':5,0:1,1:2,2:3,3:3,4:4,5:5};
-function meter(sc,short){const n=BARS[sc.lvl];return `<span class="mt ${sc.lvl<0?'nt':sc.lvl===5?'w':''}"><span class="bars">${[1,2,3,4,5].map(i=>`<i class="${sc.lvl>=0&&i<=n?'f':''}"></i>`).join('')}</span>${short?'':esc(t('lvl',sc.key))}</span>`;}
+const RINGS={'-1':0,0:1,1:2,2:3,3:3,4:4,5:5};
+function reachSvg(lvl){const n=RINGS[lvl],R=[2.8,5.2,7.3,9.3];
+  if(lvl<0)return `<svg class="rg" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="9.3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2.2 2.2"/><circle cx="11" cy="11" r="2" fill="currentColor" opacity=".35"/></svg>`;
+  return `<svg class="rg" viewBox="0 0 22 22" aria-hidden="true">${n>=5?`<circle cx="11" cy="11" r="9.3" fill="currentColor" opacity=".16"/>`:''}${R.slice(1).map((r,i)=>`<circle cx="11" cy="11" r="${r}" fill="none" stroke="currentColor" stroke-width="${i+2<=n?1.6:1.1}" opacity="${i+2<=n?1:.2}"/>`).join('')}<circle cx="11" cy="11" r="${R[0]}" fill="currentColor"/></svg>`;}
+function meter(sc,short){const cls=sc.lvl<0?'rn':'r'+sc.lvl;return `<span class="reach ${cls}${short?' only':''}" title="${esc(t('lvl',sc.key))}">${reachSvg(sc.lvl)}${short?'':`<span>${esc(t('lvl',sc.key))}</span>`}</span>`;}
+const CATC={'Agents':'#0d9488','Team Leads':'#0891b2','Management':'#4f46e5','Marketing':'#db2777','Back-office & Support':'#64748b','Test':'#d97706'};
+function avatar(p){const n=p.name.replace(/^PSI\s+(AUH|Dubai II|Dubai|Assets|The Palm|Real Estate|KSA|International)\s*-\s*/i,'').replace(/[^A-Za-z0-9 &]/g,' ').trim();const w=n.split(/\s+/).filter(Boolean);const ini=((w[0]||'?')[0]+((w[1]||'')[0]||'')).toUpperCase();return `<span class="av" style="--c:${CATC[p.category]||'#64748b'}">${esc(ini)}</span>`;}
+const KICON={total:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="m3 13 9 5 9-5"/></svg>',active:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 11.5a3 3 0 1 0 0-6M17 14.6c2.4.4 4 2 4.5 5.4"/></svg>',recent:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/></svg>',pending:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M7 3h10M7 21h10M8 3c0 4 8 5 8 9s-8 5-8 9M16 3c0 4-8 5-8 9"/></svg>',last:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>'};
 const label=k=>k.replace('|',' › ');
 function statusPill(s){return `<span class="st ${s}">${esc(t('st',s))}</span>`;}
 function cntDiff(d){return `<span class="dl">${d.added.length?`<span class="a">+${d.added.length}</span>`:''}${d.removed.length?`<span class="r">−${d.removed.length}</span>`:''}${d.modified.length?`<span class="m">~${d.modified.length}</span>`:''}${!d.added.length&&!d.removed.length&&!d.modified.length?'<span class="faint">0</span>':''}</span>`;}
@@ -512,7 +702,7 @@ const go=h=>{if(location.hash!==h)location.hash=h;else render();};
 function shell(){const r=route(),unread=ST.notifs.filter(n=>!n.read_at).length,pend=ST.crs.filter(c=>c.status==='pending').length,ready=ST.crs.filter(c=>c.status==='approved').length;
   const nav=(h,ic,l,cnt,hot)=>`<a href="#/${h}" aria-current="${r.page===h||(h==='dashboard'&&r.page==='policy')||(h==='requests'&&r.page==='cr')?'page':'false'}">${ICON[ic]}<span>${esc(l)}</span>${cnt?`<span class="cnt ${hot?'hot':''}">${cnt}</span>`:''}</a>`;
   return `<div class="shell"><aside class="rail" id="rail"><div class="logo"><span class="mark">${ICON.audit.replace('stroke="currentColor"','stroke="#fff"')}</span><span>${esc(t('appName'))}<small>${esc(t('appSub'))}</small></span></div>
-   <nav class="nav"><div class="navsec">${t('navMain')}</div>${nav('dashboard','dash',t('dashboard'))}${nav('matrix','grid',t('matrix'))}
+   <nav class="nav"><div class="navsec">${t('navMain')}</div>${nav('dashboard','dash',t('dashboard'))}${nav('compare','cmp',t('compare'))}${nav('matrix','grid',t('matrix'))}
    <div class="navsec">${t('navGov')}</div>${nav('requests','cr',t('requests'),pend+ready,pend>0)}${nav('audit','audit',t('audit'))}${nav('findings','flag',t('findings'))}
    <div class="navsec">${t('navAdmin')}</div>${nav('admin','users',t('admin'))}</nav>
    <div class="railfoot"><b>${esc(ST.name||ST.me)}</b>${esc(t('role_'+ST.role))}</div></aside>
@@ -527,6 +717,7 @@ function render(){if(!ST.ready)return;const r=route();document.title=`${t('appNa
     if(r.page==='dashboard')P.innerHTML=vDashboard();
     else if(r.page==='policy')P.innerHTML=vPolicy(+r.id,r.sub);
     else if(r.page==='matrix')P.innerHTML=vMatrix();
+    else if(r.page==='compare')P.innerHTML=vCompare(+r.id||null,+r.sub||null);
     else if(r.page==='requests')P.innerHTML=vRequests();
     else if(r.page==='cr'&&r.sub==='edit')P.innerHTML=vEditor(+r.id);
     else if(r.page==='cr')P.innerHTML=vCR(+r.id);
@@ -547,22 +738,19 @@ function vDashboard(){const total=ST.policies.length,active=ST.policies.filter(p
   const await_=ST.crs.filter(c=>c.status==='pending'&&(c.requested_by!==ST.me||ST.settings.allow_self_approval)&&can.decide()),ready=ST.crs.filter(c=>c.status==='approved'&&can.implement()),drafts=ST.crs.filter(c=>c.status==='draft'&&c.requested_by===ST.me);
   const att=[...await_.map(c=>[c,t('awaitingMe')]),...ready.map(c=>[c,t('readyImpl')]),...drafts.map(c=>[c,t('myDrafts')])].slice(0,8);
   return `<div class="ph"><div><h1>${t('dashboard')}</h1><div class="sub">${t('dashSub')}</div></div></div>
-  <div class="kpis"><div class="kpi"><div class="l">${t('kTotal')}</div><div class="v">${total}</div><div class="h">${Object.keys(cats).length} ${esc(t('categories'))}</div></div>
-   <div class="kpi"><div class="l">${t('kActive')}</div><div class="v">${active}</div><div class="h">${t('kActiveH')}</div></div>
-   <div class="kpi"><div class="l">${t('kRecent')}</div><div class="v">${recent}</div><div class="h">${t('kRecentH')}</div></div>
-   <div class="kpi ${pend?'warn':''}"><div class="l">${t('kPending')}</div><div class="v">${pend}</div><div class="h">${t('kPendingH')}</div></div>
-   <div class="kpi"><div class="l">${t('kLast')}</div><div class="v" style="font-size:17px;margin-top:8px">${last?fmtD(last.created_at):'—'}</div><div class="h">${last?esc((ST.byId[last.policy_id]||{}).name||'')+' · v'+last.version+' · '+esc(who(last.created_by)):''}</div></div></div>
+  <div class="kpis">${[['total','kTotal',total,`${Object.keys(cats).length} ${esc(t('categories'))}`,''],['active','kActive',active,t('kActiveH'),''],['recent','kRecent',recent,t('kRecentH'),''],['pending','kPending',pend,t('kPendingH'),pend?'warn':''],['last','kLast',last?fmtD(last.created_at):'—',last?esc((ST.byId[last.policy_id]||{}).name||'')+' · v'+last.version:'','date']].map(([ic,l,val,h,cls])=>`<div class="kpi ${cls}"><span class="ki k-${ic}">${KICON[ic]}</span><div class="kt"><div class="l">${t(l)}</div><div class="v">${val}</div><div class="h">${h}</div></div></div>`).join('')}</div>
   ${att.length?`<div class="panel" style="margin-bottom:16px"><div class="hd"><h2>${t('needsYou')}</h2></div><div class="list">${att.map(([c,why])=>`<a class="li" href="#/cr/${c.id}${c.status==='draft'?'/edit':''}"><span class="mono">${esc(c.code)}</span><span class="grow">${esc((ST.byId[c.policy_id]||{}).name)}${c.title?' · '+esc(c.title):''}</span><span class="tag">${esc(why)}</span>${statusPill(c.status)}</a>`).join('')}</div></div>`:''}
   <div class="panel"><div class="tbar"><div class="search">${ICON.search}<input class="inp" id="dq" placeholder="${esc(t('searchAll'))}" value="${esc(UI.q)}"></div>
     <button class="fchip" data-act="tg" data-k="active" aria-pressed="${UI.active}">${t('activeOnly')}</button><button class="fchip" data-act="tg" data-k="pend" aria-pressed="${UI.pend}">${t('hasPending')}</button>
     <select class="inp" id="dsort" aria-label="${t('sortBy')}">${[['people','sPeople'],['name','sName'],['updated','sUpdated'],['wide','sWide']].map(([v,k])=>`<option value="${v}" ${UI.sort===v?'selected':''}>${esc(t(k))}</option>`).join('')}</select>
     <div class="seg"><button data-act="view" data-v="grid" aria-pressed="${UI.view==='grid'}">${t('viewGrid')}</button><button data-act="view" data-v="cards" aria-pressed="${UI.view==='cards'}">${t('viewCards')}</button></div></div>
-   <div class="tbar"><div class="chips"><button class="fchip" data-act="cat" data-v="" aria-pressed="${!UI.cat}">${t('allCats')} <b>${total}</b></button>${Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<button class="fchip" data-act="cat" data-v="${esc(c)}" aria-pressed="${UI.cat===c}">${esc(c)} <b>${n}</b></button>`).join('')}</div><span class="faint" style="margin-inline-start:auto;font-size:12.5px">${L.length} ${t('of')} ${total}</span></div>
-   ${UI.view==='grid'?polGrid(L):polCards(L)}</div>`;}
+   <div class="tbar"><div class="chips"><button class="fchip" data-act="cat" data-v="" aria-pressed="${!UI.cat}">${t('allCats')} <b>${total}</b></button>${Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<button class="fchip" data-act="cat" data-v="${esc(c)}" aria-pressed="${UI.cat===c}"><i class="cdot" style="--c:${CATC[c]||'#64748b'}"></i>${esc(c)} <b>${n}</b></button>`).join('')}</div><span class="faint" style="margin-inline-start:auto;font-size:12.5px">${L.length} ${t('of')} ${total}</span></div>
+   <div class="legendrow"><span>${LANG==='ar'?'مدى الوصول':'Reach'}</span>${[[0,'me'],[1,'team'],[2,'tled'],[3,'bg'],[4,'branch'],[5,'all'],[-1,'notick']].map(([l,k])=>meter({lvl:l,key:k})).join('<i class="arr">›</i>')}</div>
+   ${UI.view==='grid'&&window.innerWidth>=700?polGrid(L):polCards(L)}</div>`;}
 function polGrid(L){if(!L.length)return `<div class="empty">—</div>`;
   return `<div class="tw"><table class="dg"><thead><tr><th>${t('colPolicy')}</th><th>${t('colPeople')}</th>${MODULES.map(m=>`<th>${m}</th>`).join('')}<th>${t('colVersion')}</th><th>${t('colUpdated')}</th><th>${t('colOpen')}</th><th>${t('colReview')}</th></tr></thead><tbody>
-   ${L.map(p=>{const v=ST.cur[p.id]||{},o=pendingFor(p.id),rv=ST.reviews[p.id];return `<tr class="click" data-go="#/policy/${p.id}"><td><div class="pn">${esc(p.name)}</div><div class="pc">${esc(p.category)}</div></td><td class="num">${p.people}</td>${MODULES.map(m=>`<td>${meter(scope(v.perms,m))}</td>`).join('')}<td><span class="vbadge">v${v.version||1}</span></td><td><div style="font-size:12.5px">${fmtD(v.created_at)}</div><div class="pc">${esc(who(v.created_by))}</div></td><td>${o.length?o.map(c=>statusPill(c.status)).slice(0,2).join(' '):'<span class="faint">—</span>'}</td><td>${rv?`<span class="tag">${esc(t('rv',rv.status))}</span>`:'<span class="faint">—</span>'}</td></tr>`;}).join('')}</tbody></table></div>`;}
-function polCards(L){return `<div class="cards">${L.map(p=>{const v=ST.cur[p.id]||{},o=pendingFor(p.id);return `<div class="pcard" data-go="#/policy/${p.id}"><div style="display:flex;justify-content:space-between;gap:8px"><div><div class="t">${esc(p.name)}</div><div class="pc faint" style="font-size:12px">${esc(p.category)} · ${p.people} ${t('people')}</div></div><span class="vbadge">v${v.version||1}</span></div>
+   ${L.map(p=>{const v=ST.cur[p.id]||{},o=pendingFor(p.id),rv=ST.reviews[p.id];return `<tr class="click" data-go="#/policy/${p.id}"><td><div class="pcell">${avatar(p)}<div><div class="pn">${esc(p.name)}</div><div class="pc">${esc(p.category)}</div></div></div></td><td class="num">${p.people}</td>${MODULES.map(m=>`<td>${meter(scope(v.perms,m))}</td>`).join('')}<td><span class="vbadge">v${v.version||1}</span></td><td><div style="font-size:12.5px">${fmtD(v.created_at)}</div><div class="pc">${esc(who(v.created_by))}</div></td><td>${o.length?o.map(c=>statusPill(c.status)).slice(0,2).join(' '):'<span class="faint">—</span>'}</td><td>${rv?`<span class="tag">${esc(t('rv',rv.status))}</span>`:'<span class="faint">—</span>'}</td></tr>`;}).join('')}</tbody></table></div>`;}
+function polCards(L){return `<div class="cards">${L.map(p=>{const v=ST.cur[p.id]||{},o=pendingFor(p.id);return `<div class="pcard" data-go="#/policy/${p.id}"><div style="display:flex;justify-content:space-between;gap:8px"><div class="pcell">${avatar(p)}<div><div class="t">${esc(p.name)}</div><div class="pc faint" style="font-size:12px">${esc(p.category)} · ${p.people} ${t('people')}</div></div></div><span class="vbadge">v${v.version||1}</span></div>
    <div class="mods">${MODULES.map(m=>`<div><div class="ml">${m}</div>${meter(scope(v.perms,m))}</div>`).join('')}</div>
    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px" class="faint"><span>${fmtD(v.created_at)} · ${esc(who(v.created_by))}</span>${o.length?statusPill(o[0].status):''}</div></div>`;}).join('')||'<div class="empty">—</div>'}</div>`;}
 // ---------- permission panel (shared) ----------
@@ -585,7 +773,7 @@ function optCell(it,perms,base,edit){const k=it.key,kind=KIND[k],v=val(perms,k);
   return `<span class="valtxt">${esc(shown||'—')}</span>`;}
 function permPanel({mod,left,right,base,mode,q,changedOnly,hdA,hdB}){const items=STRUCT[mod]||[];q=(q||'').toLowerCase();let h='',sec=null;
   const cmp=mode!=='view';const ref=cmp?left:null;const tgt=cmp?right:left;
-  if(cmp)h+=`<div class="rr cmp hd"><div>${esc(LANG==='ar'?'الصلاحية':'Permission')}</div><div class="colhd">${hdA}</div><div class="colhd">${hdB}</div></div>`;
+  if(cmp)h+=`<div class="rr cmp rhd"><div>${esc(LANG==='ar'?'الصلاحية':'Permission')}</div><div class="colhd">${hdA}</div><div class="colhd">${hdB}</div></div>`;
   let shown=0;
   for(const it of items){const ch=cmp?itemChange(it,ref,tgt):null;if(changedOnly&&!ch)continue;
     const nm=(it.section?it.section+' › ':'')+it.name;if(q&&!nm.toLowerCase().includes(q)&&!itemKeys(it).some(k=>k.toLowerCase().includes(q)))continue;
@@ -607,8 +795,8 @@ function vPolicy(id,sub){const p=ST.byId[id];if(!p)return `<div class="empty">�
   else if(tab==='requests')body=`<div class="panel">${reqTable(crs,true)}</div>`;
   else body=vReviewNotes(id);
   return `<div class="crumbs"><a href="#/dashboard">${t('dashboard')}</a> / ${esc(p.category)}</div>
-  <div class="ph"><div><h1>${esc(p.name)}</h1><div class="meta"><span><b>${p.people}</b> ${t('people')}</span><span>${t('category')}: <b>${esc(p.category)}</b></span><span>${t('currentVersion')}: <span class="vbadge">v${v.version||1}</span> · ${fmtDT(v.created_at)} ${t('updatedBy')} <b>${esc(who(v.created_by))}</b></span>${open.length?`<span>${open.map(c=>`<a href="#/cr/${c.id}">${esc(c.code)}</a> ${statusPill(c.status)}`).join(' ')}</span>`:''}</div></div>
-   <div class="acts"><button class="btn" data-act="mxwith" data-id="${id}">${t('openMatrix')}</button><button class="btn" data-go="#/policy/${id}/versions">${t('compareVersions')}</button>${can.create()?`<button class="btn pri" data-act="newcr" data-id="${id}">${ICON.plus}${t('changeRequest')}</button>`:''}</div></div>
+  <div class="ph"><div class="pcell big">${avatar(p)}<div><h1>${esc(p.name)}</h1><div class="meta"><span><b>${p.people}</b> ${t('people')}</span><span>${t('category')}: <b>${esc(p.category)}</b></span><span>${t('currentVersion')}: <span class="vbadge">v${v.version||1}</span> · ${fmtDT(v.created_at)} ${t('updatedBy')} <b>${esc(who(v.created_by))}</b></span>${open.length?`<span>${open.map(c=>`<a href="#/cr/${c.id}">${esc(c.code)}</a> ${statusPill(c.status)}`).join(' ')}</span>`:''}</div></div></div>
+   <div class="acts"><button class="btn" data-go="#/compare/${id}/">${ICON.cmp}${t('compareWith')}</button><button class="btn" data-act="mxwith" data-id="${id}">${t('openMatrix')}</button><button class="btn" data-go="#/policy/${id}/versions">${t('compareVersions')}</button>${can.create()?`<button class="btn pri" data-act="newcr" data-id="${id}">${ICON.plus}${t('changeRequest')}</button>`:''}</div></div>
   <div class="tabs" role="tablist">${tabs.map(([k,l])=>`<button role="tab" data-go="#/policy/${id}/${k}" aria-selected="${tab===k}">${esc(l)}</button>`).join('')}</div>${body}`;}
 function vVersions(id){const list=UI.verList[id];if(!list){loadVersions(id);return `<div class="empty">${t('loading')}</div>`;}
   const cur=list[0];const A=UI.vA&&UI.vA.pid===id?UI.vA.v:(list[1]||list[0]).version,B=UI.vB&&UI.vB.pid===id?UI.vB.v:cur.version;
@@ -757,7 +945,7 @@ function openSummary(id){const c=ST.crs.find(x=>x.id===id),cur=ST.cur[c.policy_i
 function openConfirm(title,body,btn,act,data){openModal(`<div class="modal" style="width:min(460px,100%)"><div class="mh"><h3>${esc(title)}</h3></div><div class="mb">${esc(body)}</div><div class="mf"><button class="btn" data-act="close">${t('cancel')}</button><button class="btn pri" data-act="${act}" ${Object.entries(data||{}).map(([k,v])=>`data-${k}="${esc(v)}"`).join(' ')}>${esc(btn)}</button></div></div>`);}
 function openNotifs(){closeOverlay();const d=document.createElement('div');d.id='ovl';d.innerHTML=`<div class="scrim" data-act="close" style="background:rgba(9,14,23,.25)"></div><aside class="drawer"><div class="hd"><h3>${t('notifications')}</h3><button class="btn sm ghost" data-act="readall" style="margin-inline-start:auto">${t('markAll')}</button><button class="ib" data-act="close">${ICON.x}</button></div><div class="bd">${ST.notifs.map(n=>`<a class="nt ${n.read_at?'':'unread'}" data-act="notif" data-id="${n.id}" data-cr="${n.cr_id||''}"><b>${esc(n.title)}</b><p>${esc(n.body||'')}</p><time>${fmtDT(n.created_at)}</time></a>`).join('')||`<div class="empty">${t('noNotifs')}</div>`}</div></aside>`;document.body.appendChild(d);}
 let PAL={q:'',i:0,items:[]};
-function palItems(qs){const qq=qs.trim().toLowerCase(),R=[];const pages=[['#/dashboard',t('dashboard')],['#/matrix',t('matrix')],['#/requests',t('requests')],['#/audit',t('audit')],['#/findings',t('findings')],['#/admin',t('admin')]];
+function palItems(qs){const qq=qs.trim().toLowerCase(),R=[];const pages=[['#/dashboard',t('dashboard')],['#/compare',t('compare')],['#/matrix',t('matrix')],['#/requests',t('requests')],['#/audit',t('audit')],['#/findings',t('findings')],['#/admin',t('admin')]];
   ST.policies.filter(p=>!qq||p.name.toLowerCase().includes(qq)).slice(0,qq?8:5).forEach(p=>R.push({g:t('pgPolicies'),l:p.name,s:p.category,h:'#/policy/'+p.id}));
   ST.crs.filter(c=>qq&&(c.code.toLowerCase().includes(qq)||(c.title||'').toLowerCase().includes(qq))).slice(0,6).forEach(c=>R.push({g:t('pgRequests'),l:c.code+(c.title?' · '+c.title:''),s:t('st',c.status),h:'#/cr/'+c.id}));
   if(qq.length>1)CAT.filter(([k,kd])=>kd!=='na'&&k.toLowerCase().includes(qq)).slice(0,6).forEach(([k])=>R.push({g:t('pgPerms'),l:label(k),s:t('matrix'),perm:k}));
@@ -765,6 +953,27 @@ function palItems(qs){const qq=qs.trim().toLowerCase(),R=[];const pages=[['#/das
 function openPalette(){PAL={q:'',i:0,items:palItems('')};openModal(`<div class="modal pal"><input id="palq" placeholder="${esc(t('searchAll'))}" autocomplete="off"><div class="res" id="palres"></div></div>`);drawPal();$('#palq').focus();}
 function drawPal(){let g=null;$('#palres').innerHTML=PAL.items.map((it,i)=>{const hd=it.g!==g?`<div class="grp">${esc(it.g)}</div>`:'';g=it.g;return hd+`<div class="it" data-act="palgo" data-i="${i}" aria-selected="${i===PAL.i}">${esc(it.l)}<small>${esc(it.s||'')}</small></div>`;}).join('')||`<div class="empty">—</div>`;}
 function palGo(i){const it=PAL.items[i];if(!it)return;closeOverlay();if(it.perm){UI.mxMode='perm';UI.mxQ=it.perm.split('|')[1];UI.mxMod=it.perm.split('|')[0];UI.mxOnlyDiff=false;go('#/matrix');}else go(it.h);}
+
+// ---------- compare two policies ----------
+function polSelect(id,cur,other){return `<select class="inp cmpsel" id="${id}"><option value="">${esc(t('cmpPick'))}</option>${[...new Set(ST.policies.map(p=>p.category))].map(c=>`<optgroup label="${esc(c)}">${ST.policies.filter(p=>p.category===c).sort((a,b)=>b.people-a.people||a.name.localeCompare(b.name)).map(p=>`<option value="${p.id}" ${cur===p.id?'selected':''} ${other===p.id?'disabled':''}>${esc(p.name)} · ${p.people}</option>`).join('')}</optgroup>`).join('')}</select>`;}
+function cmpCard(p,side){const v=ST.cur[p.id]||{};return `<div class="cmpcard ${side}"><div class="pcell">${avatar(p)}<div style="min-width:0"><div class="side">${side==='a'?'A':'B'}</div><a class="pn" href="#/policy/${p.id}">${esc(p.name)}</a><div class="pc">${esc(p.category)} · ${p.people} ${t('people')} · <span class="vbadge">v${v.version||1}</span></div></div></div></div>`;}
+function vCompare(a,b){const A=ST.byId[a],B=ST.byId[b];
+  const head=`<div class="ph"><div><h1>${t('compare')}</h1><div class="sub">${t('cmpSub')}</div></div></div>
+  <div class="panel" style="margin-bottom:16px"><div class="cmppick">${polSelect('cmpA',a,b)}<button class="ib swap" data-act="cmpswap" aria-label="${esc(t('swap'))}" title="${esc(t('swap'))}" ${A&&B?'':'disabled'}>${ICON.swap}</button>${polSelect('cmpB',b,a)}</div>
+   ${!A||!B?`<div class="cmpsugg"><span class="faint">${t('cmpTry')}</span>${[[1,38],[1,20],[39,78],[30,57],[38,12]].filter(([x,y])=>ST.byId[x]&&ST.byId[y]).map(([x,y])=>`<a class="fchip" href="#/compare/${x}/${y}">${esc(ST.byId[x].name)} ↔ ${esc(ST.byId[y].name)}</a>`).join('')}</div>`:''}</div>`;
+  if(!A||!B)return head;
+  const pa=(ST.cur[a]||{}).perms||{},pb=(ST.cur[b]||{}).perms||{};const d=diffMaps(pa,pb);const total=CAT.filter(([k,kd])=>kd!=='na').length;const same=total-d.added.length-d.removed.length-d.modified.length;
+  const rows=MODULES.map(m=>{const sa=scope(pa,m),sb2=scope(pb,m);const dm=diffMaps(pick(pa,m),pick(pb,m));const n=dm.added.length+dm.removed.length+dm.modified.length;
+    const verdict=sa.lvl===sb2.lvl?`<span class="verd eq">${t('sameReach')}</span>`:sa.lvl>sb2.lvl?`<span class="verd wa">A ${t('wider')}</span>`:`<span class="verd wb">B ${t('wider')}</span>`;
+    return `<button class="cmprow ${UI.cMod===m?'sel':''}" data-act="cmod" data-m="${m}"><span class="mname">${m}</span><span>${meter(sa)}</span><span class="vs">${verdict}</span><span>${meter(sb2)}</span><span class="dn">${n?`<b>${n}</b> ${t('diffs')}`:`<span class="faint">✓ ${t('identical')}</span>`}</span></button>`;}).join('');
+  if(!UI.cMod)UI.cMod=MODULES.find(m=>{const dm=diffMaps(pick(pa,m),pick(pb,m));return dm.added.length+dm.removed.length+dm.modified.length;})||'Leads';
+  return head+`<div class="cmphead">${cmpCard(A,'a')}<div class="cmpstats"><div><b class="ok">${same}</b><span>${t('identical')}</span></div><div><b class="ia">${d.removed.length}</b><span>${t('onlyA')}</span></div><div><b class="ib2">${d.added.length}</b><span>${t('onlyB')}</span></div><div><b class="md">${d.modified.length}</b><span>${t('diffVals')}</span></div></div>${cmpCard(B,'b')}</div>
+  <div class="panel" style="margin-bottom:16px"><div class="hd"><h2>${t('reachByModule')}</h2><span class="faint" style="font-size:12.5px">${t('clickModule')}</span></div><div class="cmprows"><div class="cmprow hdr"><span></span><span>A · ${esc(A.name)}</span><span></span><span>B · ${esc(B.name)}</span><span></span></div>${rows}</div></div>
+  <div class="panel"><div class="tbar"><div class="seg">${MODULES.map(m=>{const dm=diffMaps(pick(pa,m),pick(pb,m));const n=dm.added.length+dm.removed.length+dm.modified.length;return `<button data-act="cmod" data-m="${m}" aria-pressed="${UI.cMod===m}">${m}${n?` <span class="segn">${n}</span>`:''}</button>`;}).join('')}</div>
+    <div class="search">${ICON.search}<input class="inp" id="cq" placeholder="${esc(t('filterPerms'))}" value="${esc(UI.cQ||'')}"></div><button class="fchip" data-act="cdiff" aria-pressed="${UI.cOnly!==false}">${t('changedOnly')}</button>
+    ${can.create()?`<button class="btn sm" data-act="alignA" data-a="${a}" data-b="${b}" title="${esc(t('alignHelp'))}">${t('alignA')}</button>`:''}</div>
+   <div class="cmplegend"><span class="pill ad">${t('lgOnlyB')}</span><span class="pill rm">${t('lgOnlyA')}</span><span class="pill" style="background:var(--mod-bg);color:var(--mod);border-color:var(--mod)">${t('lgDiffVal')}</span></div>
+   ${permPanel({mod:UI.cMod,left:pa,right:pb,mode:'compare',q:UI.cQ||'',changedOnly:UI.cOnly!==false,hdA:`A · ${esc(A.name)}`,hdB:`B · ${esc(B.name)}`})}</div>`;}
 
 // ===================== events, auth, boot =====================
 const busyTyping=()=>{const a=document.activeElement;return a&&(a.tagName==='TEXTAREA'||(a.tagName==='INPUT'&&a.type!=='checkbox')||a.tagName==='SELECT');};
@@ -830,10 +1039,17 @@ document.addEventListener('click',async e=>{const T=e.target;const el=T.closest(
   case 'copysum':{const c=ST.crs.find(x=>x.id===id),cur=ST.cur[c.policy_id];const base=c.base_version===cur.version?cur.perms:UI.verPerms[c.policy_id+':'+c.base_version];const txt=summaryPlain(c,base,UI.ed&&UI.ed.id===id?UI.ed.draft:c.draft,UI.ed&&UI.ed.id===id?UI.ed.title:c.title);
     try{await navigator.clipboard.writeText(txt);toast(t('copied'));}catch(_){const r=document.createRange();r.selectNode($('#summText'));getSelection().removeAllRanges();getSelection().addRange(r);}break;}
   case 'palgo':palGo(+el.dataset.i);break;
+  case 'cmod':UI.cMod=el.dataset.m;render();break;
+  case 'cdiff':UI.cOnly=UI.cOnly===false;render();break;
+  case 'cmpswap':{const r=route();go(`#/compare/${r.sub}/${r.id}`);break;}
+  case 'alignA':{const A=+el.dataset.a,B=+el.dataset.b;const ex=ST.crs.find(c=>c.policy_id===A&&c.status==='draft'&&c.requested_by===ST.me);
+    const nid=ex?ex.id:await act(()=>rpc('cr_create',{p_policy:A}));if(!nid)break;
+    const ok=await act(()=>q(sb.from('change_requests').update({draft:(ST.cur[B]||{}).perms||{},title:(LANG==='ar'?'مطابقة مع ':'Match ')+ST.byId[B].name}).eq('id',nid).select('id')));
+    if(ok){await reload(['crs']);UI.ed=null;go('#/cr/'+nid+'/edit');}break;}
   }});
 document.addEventListener('input',e=>{const T=e.target;
   if(T.id==='dq'){UI.q=T.value;rerender();}else if(T.id==='pq'){UI.pq=T.value;rerender();}else if(T.id==='edq'){UI.edQ=T.value;clearTimeout(rerender.t);rerender.t=setTimeout(edRefresh,150);}
-  else if(T.id==='rq'){UI.reqF.q=T.value;rerender();}else if(T.id==='mxq'){UI.mxQ=T.value;clearTimeout(rerender.t);rerender.t=setTimeout(rerender,200);}
+  else if(T.id==='cq'){UI.cQ=T.value;rerender();}else if(T.id==='rq'){UI.reqF.q=T.value;rerender();}else if(T.id==='mxq'){UI.mxQ=T.value;clearTimeout(rerender.t);rerender.t=setTimeout(rerender,200);}
   else if(T.id==='edTitle'){UI.ed.title=T.value;edSave();}
   else if(T.dataset.act==='setv'){const k=T.dataset.k,v=T.value.trim();if(v)UI.ed.draft[k]='Value: '+v;else delete UI.ed.draft[k];edSave();clearTimeout(rerender.t);rerender.t=setTimeout(edRefresh,500);}
   else if(T.dataset.af==='q'){UI.audit.q=T.value;clearTimeout(rerender.t);rerender.t=setTimeout(()=>loadAudit(true),350);}
@@ -844,6 +1060,7 @@ document.addEventListener('change',async e=>{const T=e.target;
   else if(T.dataset.rf){UI.reqF[T.dataset.rf]=T.value;render();}
   else if(T.dataset.af&&T.dataset.af!=='q'){UI.audit[T.dataset.af]=T.value;loadAudit(true);}
   else if(T.id==='mxMod'){UI.mxMod=T.value;render();}
+  else if(T.id==='cmpA'||T.id==='cmpB'){const r=route();const a=T.id==='cmpA'?T.value:(r.id||''),b=T.id==='cmpB'?T.value:(r.sub||'');UI.cMod=null;go(`#/compare/${a}/${b}`);}
   else if(T.dataset.act==='mxtog'){const pid=+T.dataset.id;if(T.checked){if(UI.mxSel.length>=12){T.checked=false;toast(t('mxMax'),1);return;}UI.mxSel.push(pid);}else UI.mxSel=UI.mxSel.filter(x=>x!==pid);saveUI();render();}
   else if(T.dataset.act==='set'){const k=T.dataset.k;if(T.value)UI.ed.draft[k]='Value: '+T.value;else delete UI.ed.draft[k];edRefresh();edSave();}
   else if(T.dataset.act==='mrole'){const ok=await act(()=>q(sb.from('members').update({role:T.value}).eq('email',T.dataset.e)),t('saved'));if(ok){await reload(['members']);render();}}});
