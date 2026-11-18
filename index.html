@@ -504,6 +504,16 @@ button.cmprow:hover{background:var(--hover)}
 .segn{display:inline-block;background:var(--mod-bg);color:var(--mod);border-radius:999px;font-size:10.5px;padding:0 6px;margin-inline-start:4px}
 .cmplegend{display:flex;gap:8px;flex-wrap:wrap;padding:10px 18px;border-bottom:1px solid var(--line2);font-size:12px}
 @media (max-width:860px){.cmppick,.cmphead{grid-template-columns:1fr}.swap{justify-self:center;transform:rotate(90deg)}.cmprow{grid-template-columns:1fr 1fr;row-gap:6px}.cmprow .vs,.cmprow .dn{text-align:start}.cmprow.hdr{display:none}.cmpstats{grid-template-columns:repeat(4,1fr)}}
+
+.rchips{display:flex;flex-wrap:wrap;gap:6px}
+.rchip{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);background:var(--panel);color:var(--ink3);border-radius:999px;padding:4px 11px;font-size:12px;font-weight:600;transition:all .12s}
+button.rchip:hover{border-color:var(--accent);color:var(--accent)}
+.rchip.on{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
+.mrow{flex-wrap:wrap;gap:12px}
+.addm{display:grid;gap:10px;padding:14px 18px;border-top:1px solid var(--line);background:var(--panel2);border-end-start-radius:var(--rad);border-end-end-radius:var(--rad)}
+.addm .btn{justify-self:start}
+
+.decbtns{display:flex;gap:8px}.decbtns .btn[disabled]{box-shadow:none;filter:grayscale(.4)}
 </style></head>
 <body><div id="app"></div><div id="toast" class="toast" hidden></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
@@ -549,7 +559,7 @@ en:{appName:'Policy Manager',appSub:'PSI CRM · Access governance',
  roleHelp:{viewer:'Reads everything',requester:'Creates and submits change requests',approver:'Approves or rejects requests',implementer:'Marks approved requests as implemented',admin:'Everything, plus members and settings'},
  lgTitle:'Sign in',lgLead:'Enter your work email and we’ll send you a sign-in link.',lgSend:'Email me a sign-in link',lg_sent:'Check your inbox for the sign-in link.',lg_err:'Could not send the link',lg_denied:'Your email is not on the access list. Ask an admin to add you.',lg_nodata:'Signed in, but the data could not be loaded. Run the v3 database update.',lg_config:'This site is not connected to its database yet. Fill in config.js.',
  err:'Something went wrong',done_:'Done',loading:'Loading…',back:'Back',of:'of',rows:'rows',view:'View',
- pgPolicies:'Policies',compare:'Compare policies',compareWith:'Compare',cmpSub:'Pick two policies to see how far each one reaches and every permission that differs.',cmpPick:'Choose a policy…',swap:'Swap A and B',cmpTry:'Try:',identical:'identical',onlyA:'only in A',onlyB:'only in B',diffVals:'different values',reachByModule:'Reach by module',clickModule:'Click a module to see its differences',sameReach:'same reach',wider:'reaches further',diffs:'differences',alignA:'Make A match B…',alignHelp:'Opens a change request on A with B’s permissions as the draft. Nothing changes until it is approved and implemented.',lgOnlyB:'Only B has it',lgOnlyA:'Only A has it',lgDiffVal:'Different value',pgRequests:'Requests',pgPerms:'Permissions',pgPages:'Pages'},
+ pgPolicies:'Policies',compare:'Compare policies',selfBlocked2:'This is your own request, so a second person has to approve it (separation of duties).',needApprover:'Waiting for an approver. Your role can’t approve requests.',whoCanApprove:'Can approve',noApprovers:'No other approver yet — add one in Members & settings.',enableSelf:'Allow self-approval (for testing)',selfOnToast:'Self-approval is on. Turn it off when you finish testing.',multiHint:'tap roles to add or remove; a person can hold several',multiRule:'A person can hold several roles. Their rights add up, but nobody can approve their own request.',pickRole:'Pick at least one role',multiNeedsDb:'Multiple roles need the database update 03_multi_roles.sql. Until then each person keeps one role.',compareWith:'Compare',cmpSub:'Pick two policies to see how far each one reaches and every permission that differs.',cmpPick:'Choose a policy…',swap:'Swap A and B',cmpTry:'Try:',identical:'identical',onlyA:'only in A',onlyB:'only in B',diffVals:'different values',reachByModule:'Reach by module',clickModule:'Click a module to see its differences',sameReach:'same reach',wider:'reaches further',diffs:'differences',alignA:'Make A match B…',alignHelp:'Opens a change request on A with B’s permissions as the draft. Nothing changes until it is approved and implemented.',lgOnlyB:'Only B has it',lgOnlyA:'Only A has it',lgDiffVal:'Different value',pgRequests:'Requests',pgPerms:'Permissions',pgPages:'Pages'},
 ar:{appName:'إدارة البوليسيات',appSub:'PSI CRM · حوكمة الصلاحيات',
  navMain:'مساحة العمل',navGov:'الحوكمة',navAdmin:'الإدارة',
  dashboard:'لوحة التحكم',matrix:'مصفوفة الصلاحيات',requests:'طلبات التعديل',audit:'سجل التدقيق',findings:'الملاحظات',admin:'الأعضاء والإعدادات',
@@ -590,7 +600,7 @@ ar:{appName:'إدارة البوليسيات',appSub:'PSI CRM · حوكمة ال
  roleHelp:{viewer:'بيقرأ كل شي',requester:'بيعمل ويرسل طلبات تعديل',approver:'بيعتمد أو يرفض الطلبات',implementer:'بيعلّم الطلبات المعتمدة كمنفّذة',admin:'كل شي، وكمان الأعضاء والإعدادات'},
  lgTitle:'تسجيل الدخول',lgLead:'اكتب إيميل الشغل وبنبعتلك رابط دخول.',lgSend:'ابعتلي رابط الدخول',lg_sent:'شوف بريدك، الرابط بيوصل خلال دقيقة.',lg_err:'ما قدرنا نبعت الرابط',lg_denied:'إيميلك مش ضمن القائمة. اطلب من المدير يضيفك.',lg_nodata:'دخلت، بس ما قدرنا نحمّل البيانات. شغّل تحديث قاعدة البيانات v3.',lg_config:'الموقع مش مربوط بقاعدة البيانات. عبّي config.js.',
  err:'صار خطأ',done_:'تم',loading:'عم يحمّل…',back:'رجوع',of:'من',rows:'صف',view:'عرض',
- pgPolicies:'البوليسيات',compare:'مقارنة البوليسيات',compareWith:'قارن',cmpSub:'اختار بوليسيتين لتشوف مدى وصول كل وحدة، وكل صلاحية مختلفة بينهم.',cmpPick:'اختار بوليسي…',swap:'بدّل A و B',cmpTry:'جرّب:',identical:'متطابقة',onlyA:'بس عند A',onlyB:'بس عند B',diffVals:'قيم مختلفة',reachByModule:'مدى الوصول لكل قسم',clickModule:'اكبس على قسم لتشوف الاختلافات',sameReach:'نفس المدى',wider:'أوسع',diffs:'اختلاف',alignA:'خلّي A زي B…',alignHelp:'بيفتح طلب تعديل على A ومسودته صلاحيات B. ما بيتغيّر شي إلا بعد الاعتماد والتنفيذ.',lgOnlyB:'موجودة بس عند B',lgOnlyA:'موجودة بس عند A',lgDiffVal:'قيمة مختلفة',pgRequests:'الطلبات',pgPerms:'الصلاحيات',pgPages:'الصفحات'}};
+ pgPolicies:'البوليسيات',compare:'مقارنة البوليسيات',selfBlocked2:'هذا طلبك إنت، فلازم شخص ثاني يعتمده (فصل المهام).',needApprover:'بانتظار معتمِد. دورك ما بيسمح بالاعتماد.',whoCanApprove:'بيقدر يعتمد',noApprovers:'ما في معتمِد ثاني لسا — ضيف واحد من الأعضاء والإعدادات.',enableSelf:'اسمح بالاعتماد الذاتي (للتجربة)',selfOnToast:'الاعتماد الذاتي شغّال. طفّيه لما تخلص التجربة.',multiHint:'اكبس على الأدوار لتضيف أو تشيل؛ الشخص ممكن يكون إله أكثر من دور',multiRule:'الشخص ممكن يكون إله أكثر من دور، وصلاحياته بتنجمع، بس ما حدا بيقدر يعتمد طلبه بنفسه.',pickRole:'اختار دور واحد على الأقل',multiNeedsDb:'تعدد الأدوار بيحتاج تحديث قاعدة البيانات 03_multi_roles.sql. لحد ما تشغّله، كل شخص إله دور واحد.',compareWith:'قارن',cmpSub:'اختار بوليسيتين لتشوف مدى وصول كل وحدة، وكل صلاحية مختلفة بينهم.',cmpPick:'اختار بوليسي…',swap:'بدّل A و B',cmpTry:'جرّب:',identical:'متطابقة',onlyA:'بس عند A',onlyB:'بس عند B',diffVals:'قيم مختلفة',reachByModule:'مدى الوصول لكل قسم',clickModule:'اكبس على قسم لتشوف الاختلافات',sameReach:'نفس المدى',wider:'أوسع',diffs:'اختلاف',alignA:'خلّي A زي B…',alignHelp:'بيفتح طلب تعديل على A ومسودته صلاحيات B. ما بيتغيّر شي إلا بعد الاعتماد والتنفيذ.',lgOnlyB:'موجودة بس عند B',lgOnlyA:'موجودة بس عند A',lgDiffVal:'قيمة مختلفة',pgRequests:'الطلبات',pgPerms:'الصلاحيات',pgPages:'الصفحات'}};
 
 // ===================== core: helpers, model, data =====================
 let LANG='en';try{LANG=localStorage.getItem('lang')||'en'}catch(e){}
@@ -662,9 +672,10 @@ function analyse(base,draft,pol){const d=diffMaps(base,draft),R=[];
   const order={h:0,m:1,l:2};R.sort((x,y)=>order[x.lv]-order[y.lv]);
   const seen=new Set();return {diff:d,risks:R.filter(r=>!seen.has(r.txt)&&seen.add(r.txt)),people:pol?pol.people:0};}
 // ---------- state ----------
-const ST={me:'',role:null,name:'',members:[],settings:{},policies:[],byId:{},cur:{},crs:[],notifs:[],findings:[],fstat:{},reviews:{},noPolicy:0,ready:false};
+const ST={me:'',role:null,roles:[],name:'',members:[],settings:{},policies:[],byId:{},cur:{},crs:[],notifs:[],findings:[],fstat:{},reviews:{},noPolicy:0,ready:false};
 let sb=null;
-const can={create:()=>['requester','approver','implementer','admin'].includes(ST.role),decide:()=>['approver','admin'].includes(ST.role),implement:()=>['implementer','admin'].includes(ST.role),admin:()=>ST.role==='admin',write:()=>ST.role&&ST.role!=='viewer'};
+const hasR=(...r)=>ST.roles.some(x=>r.includes(x));
+const can={create:()=>hasR('requester','approver','implementer','admin'),decide:()=>hasR('approver','admin'),implement:()=>hasR('implementer','admin'),admin:()=>hasR('admin'),write:()=>hasR('requester','approver','implementer','admin')};
 const who=e=>{const m=ST.members.find(x=>x.email.toLowerCase()===(e||'').toLowerCase());return m&&m.name?m.name:(e==='crm-import'?(LANG==='ar'?'استيراد الـ CRM':'CRM import'):(e||'—'));};
 function toast(msg,err){const el=$('#toast');el.textContent=msg;el.className='toast'+(err?' err':'');el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,err?4200:2200);}
 function errMsg(e){const m=(e&&(e.message||e.msg))||String(e);const i=m.indexOf(': ');return /^(not_allowed|invalid|stale|invalid_state|not_found)/.test(m)&&i>0?m.slice(i+2):m;}
@@ -672,7 +683,7 @@ async function rpc(fn,args){const {data,error}=await sb.rpc(fn,args);if(error)th
 async function q(p){const {data,error}=await p;if(error)throw error;return data;}
 async function loadCore(){
   const [mem,set,pol,cur,crs,nts,ad,rv,fs]=await Promise.all([
-    q(sb.from('members').select('email,name,role')),q(sb.from('settings').select('*')),q(sb.from('policies').select('*')),
+    loadMembers(),q(sb.from('settings').select('*')),q(sb.from('policies').select('*')),
     q(sb.from('policy_current').select('*')),q(sb.from('change_requests').select('*').order('id',{ascending:false})),
     q(sb.from('notifications').select('*').order('created_at',{ascending:false}).limit(200)),
     q(sb.from('app_data').select('data').eq('id',1).single()),q(sb.from('reviews').select('*')),q(sb.from('findings_status').select('*'))]);
@@ -684,11 +695,16 @@ async function reload(parts){try{
   if(parts.includes('crs'))ST.crs=await q(sb.from('change_requests').select('*').order('id',{ascending:false}));
   if(parts.includes('cur')){const cur=await q(sb.from('policy_current').select('*'));ST.cur={};cur.forEach(v=>ST.cur[v.policy_id]=v);}
   if(parts.includes('notifs'))ST.notifs=await q(sb.from('notifications').select('*').order('created_at',{ascending:false}).limit(200));
-  if(parts.includes('members'))ST.members=await q(sb.from('members').select('email,name,role'));
+  if(parts.includes('members'))ST.members=await loadMembers();
   if(parts.includes('settings'))ST.settings=(await q(sb.from('settings').select('*')))[0]||{};
   if(parts.includes('misc')){const [rv,fs]=await Promise.all([q(sb.from('reviews').select('*')),q(sb.from('findings_status').select('*'))]);ST.reviews={};rv.forEach(r=>ST.reviews[r.policy_id]=r);ST.fstat={};fs.forEach(r=>ST.fstat[r.id]=r);}
  }catch(e){console.error(e);}}
 const pendingFor=pid=>ST.crs.filter(c=>c.policy_id===pid&&['draft','pending','approved'].includes(c.status));
+
+const ROLES=['viewer','requester','approver','implementer','admin'];
+const rolesOf=m=>(m&&Array.isArray(m.roles)&&m.roles.length?m.roles:[m&&m.role].filter(Boolean));
+let MULTI=true;
+async function loadMembers(){if(MULTI){const {data,error}=await sb.from('members').select('email,name,role,roles');if(!error)return data||[];MULTI=false;}return await q(sb.from('members').select('email,name,role'));}
 
 // ===================== views =====================
 const UI={cat:'',q:'',active:false,pend:false,sort:'people',view:'grid',mxMode:'mod',mxSel:[1,20,9,46],mxOnlyDiff:true,mxQ:'',mxMod:'',mxPick:false,mxSort:null,
@@ -705,7 +721,7 @@ function shell(){const r=route(),unread=ST.notifs.filter(n=>!n.read_at).length,p
    <nav class="nav"><div class="navsec">${t('navMain')}</div>${nav('dashboard','dash',t('dashboard'))}${nav('compare','cmp',t('compare'))}${nav('matrix','grid',t('matrix'))}
    <div class="navsec">${t('navGov')}</div>${nav('requests','cr',t('requests'),pend+ready,pend>0)}${nav('audit','audit',t('audit'))}${nav('findings','flag',t('findings'))}
    <div class="navsec">${t('navAdmin')}</div>${nav('admin','users',t('admin'))}</nav>
-   <div class="railfoot"><b>${esc(ST.name||ST.me)}</b>${esc(t('role_'+ST.role))}</div></aside>
+   <div class="railfoot"><b>${esc(ST.name||ST.me)}</b>${esc(ST.roles.map(r=>t('role_'+r)).join(' · '))}</div></aside>
   <div class="main"><header class="top"><button class="burger ib" data-act="burger" aria-label="menu">${ICON.menu}</button>
    <div class="gsearch" data-act="palette" role="button" tabindex="0">${ICON.search.replace('<svg','<svg width="16" height="16"')}<span class="txt">${esc(t('searchAll'))}</span><kbd>Ctrl K</kbd></div>
    <div class="topend"><button class="ib" data-act="notifs" aria-label="${esc(t('notifications'))}">${ICON.bell}${unread?`<span class="badge-dot">${unread}</span>`:''}</button>
@@ -851,7 +867,11 @@ function vCR(id){const c=ST.crs.find(x=>x.id===id);if(!c)return `<div class="emp
   const ev=UI.crEvents[id]||[];const icon={created:'＋',submitted:'↑',approved:'✓',rejected:'✕',implemented:'★',cancelled:'⊘',comment:'💬',rebased:'↻',edited:'✎'};
   const mine=c.requested_by===ST.me;let acts='';
   if(c.status==='draft'&&mine)acts=`<button class="btn pri" data-go="#/cr/${id}/edit">${t('editDraft')}</button> <button class="btn no" data-act="discard" data-id="${id}">${t('discard')}</button>`;
-  else if(c.status==='pending'){if(can.decide()&&(!mine||ST.settings.allow_self_approval))acts=`<label class="fl" for="decC">${t('comment')}</label><textarea class="inp" id="decC" rows="3" placeholder="${esc(t('decisionPh'))}" style="width:100%"></textarea><div style="display:flex;gap:8px;margin-top:10px"><button class="btn ok" data-act="decide" data-v="approved" data-id="${id}">✓ ${t('approve')}</button><button class="btn no" data-act="decide" data-v="rejected" data-id="${id}">✕ ${t('reject')}</button></div>`;else if(can.decide()&&mine)acts=`<div class="faint">${t('selfBlocked')}</div>`;
+  else if(c.status==='pending'){if(can.decide()&&(!mine||ST.settings.allow_self_approval))acts=`<label class="fl" for="decC">${t('comment')}</label><textarea class="inp" id="decC" rows="3" placeholder="${esc(t('decisionPh'))}" style="width:100%"></textarea><div style="display:flex;gap:8px;margin-top:10px"><button class="btn ok" data-act="decide" data-v="approved" data-id="${id}">✓ ${t('approve')}</button><button class="btn no" data-act="decide" data-v="rejected" data-id="${id}">✕ ${t('reject')}</button></div>`;else{const apprs=ST.members.filter(m=>rolesOf(m).some(r=>r==='approver'||r==='admin')&&m.email.toLowerCase()!==c.requested_by).map(m=>m.name||m.email);
+      acts=`<div class="decbox"><div class="decbtns"><button class="btn ok" disabled>✓ ${t('approve')}</button><button class="btn no" disabled>✕ ${t('reject')}</button></div>
+      <div class="banner info" style="margin:12px 0 0">${mine&&can.decide()?t('selfBlocked2'):t('needApprover')}</div>
+      ${apprs.length?`<div class="faint" style="font-size:12.5px;margin-top:8px">${t('whoCanApprove')}: <b style="color:var(--ink2)">${apprs.map(esc).join('، ')}</b></div>`:`<div class="faint" style="font-size:12.5px;margin-top:8px">${t('noApprovers')}</div>`}
+      ${mine&&can.admin()?`<button class="btn sm" style="margin-top:10px" data-act="selfappr" data-back="1">${t('enableSelf')}</button>`:''}</div>`;}
     if(mine)acts+=`<div style="margin-top:10px"><button class="btn sm" data-act="withdraw" data-id="${id}">${t('withdraw')}</button></div>`;}
   else if(c.status==='approved'&&can.implement())acts=`<label style="display:flex;gap:8px;align-items:center;font-size:13.5px"><input type="checkbox" id="implOk"> ${t('implConfirm')}</label><input class="inp" id="implC" placeholder="${esc(t('implPh'))}" style="width:100%;margin-top:8px"><div style="margin-top:10px"><button class="btn ok" data-act="implement" data-id="${id}">★ ${t('implement')}</button></div>`;
   const rows=d?[...d.added.map(k=>['a',k,'Disabled','Enabled']),...d.removed.map(k=>['r',k,'Enabled','Disabled']),...d.modified.map(x=>['m',x.key,x.from,x.to])]:[];
@@ -929,10 +949,13 @@ function vFindings(){return `<div class="ph"><div><h1>${t('findings')}</h1><div 
    <div style="display:grid;gap:6px;width:260px;max-width:100%"><select class="inp" id="fs-${f.id}" ${can.write()?'':'disabled'}>${['open','inprog','done'].map(k=>`<option value="${k}" ${st===k?'selected':''}>${esc(t(k))}</option>`).join('')}</select><input class="inp" id="fo-${f.id}" placeholder="${esc(t('owner'))}" value="${esc(s.owner||'')}" ${can.write()?'':'disabled'}><input class="inp" id="fn-${f.id}" placeholder="${esc(t('note'))}" value="${esc(s.note||'')}" ${can.write()?'':'disabled'}><div style="display:flex;justify-content:space-between;align-items:center"><span class="faint" style="font-size:11.5px">${s.by_email?esc(who(s.by_email))+' · '+fmtD(s.at):''}</span><button class="btn sm" data-act="fsave" data-id="${f.id}" ${can.write()?'':'disabled'}>${t('save')}</button></div></div></div>`;}).join('')}</div></div>`;}
 // ---------- admin ----------
 function vAdmin(){const adm=can.admin();
-  return `<div class="ph"><div><h1>${t('admin')}</h1><div class="sub">${t('adminSub')}</div></div></div><div class="grid2"><div class="panel"><div class="hd"><h2>${t('admin')}</h2><span class="faint" style="font-size:12.5px">${ST.members.length}</span></div>
-   <div class="tw"><table class="dg"><thead><tr><th>${t('name')}</th><th>${t('email')}</th><th>${t('role')}</th><th></th></tr></thead><tbody>${ST.members.slice().sort((a,b)=>(a.name||a.email).localeCompare(b.name||b.email)).map(m=>`<tr><td>${esc(m.name||'')}</td><td class="mono" style="font-size:12.5px">${esc(m.email)}</td><td>${adm?`<select class="inp" data-act="mrole" data-e="${esc(m.email)}">${['viewer','requester','approver','implementer','admin'].map(r=>`<option value="${r}" ${m.role===r?'selected':''}>${esc(t('role_'+r))}</option>`).join('')}</select>`:esc(t('role_'+m.role))}</td><td>${adm&&m.email.toLowerCase()!==ST.me?`<button class="btn sm no" data-act="mdel" data-e="${esc(m.email)}">${t('remove')}</button>`:''}</td></tr>`).join('')}</tbody></table></div>
-   ${adm?`<div class="tbar" style="border-top:1px solid var(--line);border-bottom:0"><input class="inp" id="nmEmail" type="email" placeholder="${esc(t('email'))}" style="flex:2 1 200px"><input class="inp" id="nmName" placeholder="${esc(t('name'))}" style="flex:1 1 140px"><select class="inp" id="nmRole">${['viewer','requester','approver','implementer','admin'].map(r=>`<option value="${r}" ${r==='requester'?'selected':''}>${esc(t('role_'+r))}</option>`).join('')}</select><button class="btn pri" data-act="madd">${t('addMember')}</button></div>`:''}</div>
-  <div style="display:grid;gap:16px"><div class="panel"><div class="hd"><h2>${t('role')}</h2></div><div class="list">${['viewer','requester','approver','implementer','admin'].map(r=>`<div class="li"><b style="width:110px">${esc(t('role_'+r))}</b><span class="muted grow">${esc(t('roleHelp',r))}</span></div>`).join('')}</div></div>
+  const chipset=(m)=>{const rs=rolesOf(m);return `<div class="rchips">${ROLES.map(r=>adm?`<button class="rchip ${rs.includes(r)?'on':''}" data-act="mrtog" data-e="${esc(m.email)}" data-r="${r}" aria-pressed="${rs.includes(r)}" ${!MULTI&&!rs.includes(r)?'':''}>${rs.includes(r)?'✓ ':''}${esc(t('role_'+r))}</button>`:(rs.includes(r)?`<span class="rchip on">${esc(t('role_'+r))}</span>`:'')).join('')}</div>`;};
+  return `<div class="ph"><div><h1>${t('admin')}</h1><div class="sub">${t('adminSub')}</div></div></div>
+  ${!MULTI&&adm?`<div class="banner warn">${t('multiNeedsDb')}</div>`:''}
+  <div class="grid2"><div class="panel"><div class="hd"><h2>${t('admin')}</h2><span class="faint" style="font-size:12.5px">${ST.members.length} · ${t('multiHint')}</span></div>
+   <div class="list">${ST.members.slice().sort((a,b)=>(a.name||a.email).localeCompare(b.name||b.email)).map(m=>`<div class="li mrow"><div class="pcell" style="min-width:200px;flex:1"><span class="av" style="--c:#2b59c3">${esc(((m.name||m.email)[0]||'?').toUpperCase())}</span><div style="min-width:0"><div class="pn" style="font-weight:700">${esc(m.name||'—')}</div><div class="mono faint" style="font-size:12px;overflow-wrap:anywhere">${esc(m.email)}</div></div></div>${chipset(m)}${adm&&m.email.toLowerCase()!==ST.me?`<button class="btn sm no" data-act="mdel" data-e="${esc(m.email)}">${t('remove')}</button>`:''}</div>`).join('')}</div>
+   ${adm?`<div class="addm"><div class="tbar" style="border:0;padding:0"><input class="inp" id="nmEmail" type="email" placeholder="${esc(t('email'))}" style="flex:2 1 220px"><input class="inp" id="nmName" placeholder="${esc(t('name'))}" style="flex:1 1 150px"></div><div class="rchips" id="nmRoles">${ROLES.map(r=>`<button class="rchip ${r==='requester'?'on':''}" data-act="nmr" data-r="${r}" aria-pressed="${r==='requester'}">${r==='requester'?'✓ ':''}${esc(t('role_'+r))}</button>`).join('')}</div><button class="btn pri" data-act="madd">${t('addMember')}</button></div>`:''}</div>
+  <div style="display:grid;gap:16px"><div class="panel"><div class="hd"><h2>${t('role')}</h2></div><div class="list">${ROLES.map(r=>`<div class="li"><span class="rchip on" style="min-width:104px;justify-content:center">${esc(t('role_'+r))}</span><span class="muted grow">${esc(t('roleHelp',r))}</span></div>`).join('')}</div><div class="bd faint" style="font-size:12.5px;border-top:1px solid var(--line2)">${t('multiRule')}</div></div>
    <div class="panel"><div class="hd"><h2>Settings</h2></div><div class="bd"><label style="display:flex;gap:10px;align-items:center"><button class="sw ${ST.settings.allow_self_approval?'on':''}" data-act="selfappr" ${adm?'':'disabled'} aria-pressed="${!!ST.settings.allow_self_approval}"></button>${t('selfApproval')}</label><div class="faint" style="font-size:12.5px;margin-top:6px">${t('selfApprovalHelp')}</div></div></div></div></div>`;}
 // ---------- overlays ----------
 function openModal(html){closeOverlay();const d=document.createElement('div');d.className='scrim';d.id='ovl';d.innerHTML=html;document.body.appendChild(d);d.addEventListener('click',e=>{if(e.target===d)closeOverlay();});const f=d.querySelector('input,textarea,button');if(f)f.focus();}
@@ -1032,8 +1055,13 @@ document.addEventListener('click',async e=>{const T=e.target;const el=T.closest(
   case 'audmore':loadAudit(false);break;
   case 'fsave':{const fid=el.dataset.id;const ok=await act(()=>q(sb.from('findings_status').upsert({id:fid,status:$('#fs-'+fid).value,owner:$('#fo-'+fid).value.trim().slice(0,120),note:$('#fn-'+fid).value.trim().slice(0,1000),by_email:ST.me,at:new Date().toISOString()})),t('saved'));if(ok){await reload(['misc']);render();}break;}
   case 'mdel':{const em=el.dataset.e;const ok=await act(()=>q(sb.from('members').delete().eq('email',em)),t('done_'));if(ok){await reload(['members']);render();}break;}
-  case 'madd':{const em=$('#nmEmail').value.trim().toLowerCase();if(!/^\S+@\S+\.\S+$/.test(em)){toast(t('email'),1);break;}const ok=await act(()=>q(sb.from('members').upsert({email:em,name:$('#nmName').value.trim()||null,role:$('#nmRole').value})),t('done_'));if(ok){await reload(['members']);render();}break;}
-  case 'selfappr':{if(!can.admin())break;const ok=await act(()=>q(sb.from('settings').update({allow_self_approval:!ST.settings.allow_self_approval,updated_at:new Date().toISOString()}).eq('id',1)),t('saved'));if(ok){await reload(['settings']);render();}break;}
+  case 'nmr':{el.classList.toggle('on');const on=el.classList.contains('on');el.setAttribute('aria-pressed',on);el.textContent=(on?'✓ ':'')+t('role_'+el.dataset.r);break;}
+  case 'madd':{const em=$('#nmEmail').value.trim().toLowerCase();if(!/^\S+@\S+\.\S+$/.test(em)){toast(t('email'),1);break;}const rs=[...document.querySelectorAll('#nmRoles .rchip.on')].map(b=>b.dataset.r);if(!rs.length){toast(t('pickRole'),1);break;}
+    const row=MULTI?{email:em,name:$('#nmName').value.trim()||null,roles:rs}:{email:em,name:$('#nmName').value.trim()||null,role:rs[0]};const ok=await act(()=>q(sb.from('members').upsert(row)),t('done_'));if(ok){await reload(['members']);render();}break;}
+  case 'mrtog':{const m=ST.members.find(x=>x.email===el.dataset.e);let rs=rolesOf(m).slice();const r=el.dataset.r;
+    if(!MULTI){rs=[r];}else if(rs.includes(r)){if(rs.length===1){toast(t('pickRole'),1);break;}rs=rs.filter(x=>x!==r);}else rs.push(r);
+    const ok=await act(()=>q(sb.from('members').update(MULTI?{roles:rs}:{role:rs[0]}).eq('email',m.email).select('email')),t('saved'));if(ok){await reload(['members']);if(m.email.toLowerCase()===ST.me){const me=ST.members.find(x=>x.email.toLowerCase()===ST.me);ST.roles=rolesOf(me);ST.role=ST.roles[0];}render();}break;}
+  case 'selfappr':{if(!can.admin())break;const ok=await act(()=>q(sb.from('settings').update({allow_self_approval:!ST.settings.allow_self_approval,updated_at:new Date().toISOString()}).eq('id',1)),t('saved'));if(ok){await reload(['settings']);render();if(ST.settings.allow_self_approval&&el.dataset.back)toast(t('selfOnToast'));}break;}
   case 'readall':await act(()=>rpc('notif_mark_read',{p_ids:null}));await reload(['notifs']);openNotifs();render();openNotifs();break;
   case 'notif':{await act(()=>rpc('notif_mark_read',{p_ids:[id]}));closeOverlay();await reload(['notifs']);if(el.dataset.cr)go('#/cr/'+el.dataset.cr);else render();break;}
   case 'copysum':{const c=ST.crs.find(x=>x.id===id),cur=ST.cur[c.policy_id];const base=c.base_version===cur.version?cur.perms:UI.verPerms[c.policy_id+':'+c.base_version];const txt=summaryPlain(c,base,UI.ed&&UI.ed.id===id?UI.ed.draft:c.draft,UI.ed&&UI.ed.id===id?UI.ed.title:c.title);
@@ -1077,8 +1105,8 @@ function loginView(reason){document.getElementById('app').innerHTML=`<div class=
   <div style="display:flex;justify-content:space-between;margin-top:16px"><button class="btn ghost sm" data-act="lang">${t('lang')}</button>${reason==='denied'||reason==='nodata'?`<button class="btn ghost sm" data-act="signout">${t('signOut')}</button>`:''}</div></div></div>`;
   const f=$('#lgf');if(f)f.addEventListener('submit',async ev=>{ev.preventDefault();const em=$('#lgEmail').value.trim().toLowerCase();const {error}=await sb.auth.signInWithOtp({email:em,options:{emailRedirectTo:location.origin+location.pathname}});const m=$('#lgmsg');m.className='banner '+(error?'bad':'info');m.textContent=error?t('lg_err')+' ('+error.message+')':t('lg_sent');});}
 async function start(session){if(start.busy)return;start.busy=1;try{ST.me=(session.user.email||'').toLowerCase();
-  const mem=await q(sb.from('members').select('email,name,role'));const mine=(mem||[]).find(m=>m.email.toLowerCase()===ST.me);if(!mine){loginView('denied');return;}
-  ST.role=mine.role;ST.name=mine.name;
+  const mem=await loadMembers();const mine=(mem||[]).find(m=>m.email.toLowerCase()===ST.me);if(!mine){loginView('denied');return;}
+  ST.roles=rolesOf(mine);ST.role=ST.roles[0];ST.name=mine.name;
   try{await loadCore();}catch(e){console.error(e);loginView('nodata');return;}
   if(!CAT.length){loginView('nodata');return;}
   render();
